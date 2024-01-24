@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -40,5 +41,23 @@ public class User
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles = new HashSet<>();
+
+    @Column(nullable = false)
+    private String phone;
+
+    @Column(nullable = false)
+    private boolean status;
+
+    @Column(nullable = false)
+    private LocalDateTime creation_date;
+
+    @Column
+    private LocalDateTime last_updated;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    private Customer customer;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    private Seller seller;
 
 }

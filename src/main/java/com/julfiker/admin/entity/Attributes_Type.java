@@ -1,36 +1,32 @@
 package com.julfiker.admin.entity;
 
-
-import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
-@Setter
 @Getter
-@NoArgsConstructor
+@Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table(name="roles")
-public class Role
-{
+@Table(name = "attributes_types")
+public class Attributes_Type {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "Attributes_Type_ID")
+    private long attributesTypeID;
 
-    @Column(nullable=false, unique=true)
+    @Column(nullable = false)
     private String name;
+
 
     @Column(nullable = false)
     private LocalDateTime creation_date;
 
     @Column
     private LocalDateTime last_updated;
-
-    @ManyToMany(mappedBy="roles")
-    private List<User> users;
 }
