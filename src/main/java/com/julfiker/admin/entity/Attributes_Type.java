@@ -18,7 +18,7 @@ public class Attributes_Type {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Attributes_Type_ID")
-    private long attributesTypeID;
+    private Long attributesTypeID;
 
     @Column(nullable = false)
     private String name;

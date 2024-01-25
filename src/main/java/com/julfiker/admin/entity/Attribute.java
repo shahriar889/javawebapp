@@ -19,7 +19,7 @@ public class Attribute {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Attribute_ID")
-    private long attributeID;
+    private Long attributeID;
 
     @Column(nullable = false)
     private String name;

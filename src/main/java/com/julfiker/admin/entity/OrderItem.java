@@ -19,7 +19,7 @@ public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Order_Item_ID")
-    private long orderItemID;
+    private Long orderItemID;
 
     @Column(nullable = false)
     private LocalDateTime creation_date;

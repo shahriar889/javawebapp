@@ -19,7 +19,7 @@ public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Cart_Item_ID")
-    private long cartItemID;
+    private Long cartItemID;
 
     @Column(nullable = false)
     private LocalDateTime creation_date;

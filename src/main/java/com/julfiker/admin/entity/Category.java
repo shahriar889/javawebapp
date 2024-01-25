@@ -19,7 +19,7 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Category_ID")
-    private long categoryID;
+    private Long categoryID;
 
     @Column(nullable = false)
     private String name;
@@ -31,7 +31,7 @@ public class Category {
     @JoinColumn(name = "Parent_ID")
     private Category parentCategory;
 
-    @Column(nullable = false)
+    @Column
     private LocalDateTime creation_date;
 
     @Column
@@ -42,5 +42,7 @@ public class Category {
 
     @ManyToMany(mappedBy="categories")
     private List<Item> items;
+
+
 
 }

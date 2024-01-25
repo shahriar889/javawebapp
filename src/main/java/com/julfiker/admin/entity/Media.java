@@ -19,7 +19,7 @@ public class Media {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Media_ID")
-    private long mediaID;
+    private Long mediaID;
 
     @Column(nullable = false)
     private String fileOriginalPath;
