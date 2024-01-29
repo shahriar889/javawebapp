@@ -143,6 +143,6 @@ public class MediaManagerImpl implements MediaManager{
 
     @Override
     public void deleteMediaByID(Long ID){
-        mediaRepository.deleteById(ID);
+        mediaRepository.deleteByMediaID(ID);
     }
 }

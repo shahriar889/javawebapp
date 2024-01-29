@@ -96,6 +96,6 @@ public class PaymentMethodManagerImpl implements PaymentMethodManager{
     }
     @Override
     public void deletePaymentMethod(Long ID){
-        paymentMethodRepository.deleteById(ID);
+        paymentMethodRepository.deleteByPaymentMethodID(ID);
     }
 }

@@ -22,7 +22,7 @@ public class ApplicationController {
 
     @GetMapping("/applications")
     public String getApplicationData(Model model, Authentication authentication) {
-        System.out.println(userManager.findUserByEmail(authentication.getName()).getId());
+        System.out.println(userManager.findUserByEmail(authentication.getName()).getUserID());
         List<Application> applicationList = applicationManager.findAllApplications();
         model.addAttribute("applications", applicationList);
         return "applications";

@@ -4,6 +4,7 @@ import com.julfiker.admin.dto.PaymentMethodDTO;
 import com.julfiker.admin.entity.PaymentMethod;
 import com.julfiker.admin.manager.PaymentMethodManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,6 +38,7 @@ public class PaymentMethodController {
         paymentMethodManager.updatePaymentMethod(paymentMethodDTO);
     }
     @DeleteMapping("/delete")
+    @Transactional
     public void deletePaymentMethod(@RequestParam Long ID){
         paymentMethodManager.deletePaymentMethod(ID);
     }

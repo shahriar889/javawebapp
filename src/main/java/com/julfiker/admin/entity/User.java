@@ -23,7 +23,8 @@ public class User
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "User_ID")
+    private Long userID;
 
     @Column(nullable=false)
     private String name;
@@ -37,8 +38,8 @@ public class User
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
+            joinColumns = @JoinColumn(name = "User_ID"),
+            inverseJoinColumns = @JoinColumn(name = "Role_ID")
     )
     private Set<Role> roles = new HashSet<>();
 

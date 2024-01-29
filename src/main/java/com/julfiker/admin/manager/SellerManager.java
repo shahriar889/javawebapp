@@ -1,6 +1,7 @@
 package com.julfiker.admin.manager;
 
 import com.julfiker.admin.dto.SellerDTO;
+import com.julfiker.admin.dto.UserDto;
 import com.julfiker.admin.entity.Seller;
 
 import java.math.BigDecimal;
@@ -8,7 +9,7 @@ import java.util.List;
 
 public interface SellerManager {
 
-    void saveSeller(SellerDTO sellerDTO);
+    void saveSeller(SellerDTO sellerDTO, UserDto userDto);
     void updateSeller(SellerDTO sellerDTO);
     void deleteSellerByID(Long ID);
 
@@ -19,6 +20,8 @@ public interface SellerManager {
     List<SellerDTO> findAllByRating(BigDecimal rating);
     List<SellerDTO> findAllByReturnPolicy(String returnPolicy);
     List<SellerDTO> findAll();
+
+    void addMediaToSeller(Long sellerID, Long mediaID);
 
     void setSellerRating(Long ID, BigDecimal rating);
 

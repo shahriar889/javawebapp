@@ -42,7 +42,7 @@ public class AuthenticateController {
                                BindingResult result,
                                Model model){
         System.out.println(userDto.getEmail());
-        User existingUser = userManager.findUserByEmail(userDto.getEmail());
+        UserDto existingUser = userManager.findUserByEmail(userDto.getEmail());
 
         if(existingUser != null && existingUser.getEmail() != null && !existingUser.getEmail().isEmpty()){
             result.rejectValue("email", null,

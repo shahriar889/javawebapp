@@ -14,5 +14,7 @@ public interface MediaRepository extends JpaRepository<Media, Long> {
     List<Media> findAllByFileExtension(String msg);
     Media findByFileThumbnailPath(String msg);
 
+    void deleteByMediaID(Long ID);
+
 
 }

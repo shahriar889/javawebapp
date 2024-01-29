@@ -26,7 +26,7 @@ public class ItemType {
     @Column(name = "Item_type_ID")
     private Long itemTypeID;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @Column(nullable = false, columnDefinition = "TEXT")

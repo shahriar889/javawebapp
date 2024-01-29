@@ -1,11 +1,13 @@
 package com.julfiker.admin.dto;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -13,14 +15,13 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UserDto
 {
-    private Long id;
-    @NotEmpty
-    private String firstName;
-    @NotEmpty
-    private String lastName;
-    @NotEmpty(message = "Email should not be empty")
+    private Long userID;
+    private String name;
     @Email
     private String email;
-    @NotEmpty(message = "Password should not be empty")
     private String password;
+    private Set<Long> roleIDSet;
+    private LocalDateTime creation_Date;
+    private LocalDateTime last_updated;
+    private String phone;
 }

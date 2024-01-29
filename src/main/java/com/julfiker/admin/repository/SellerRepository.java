@@ -17,4 +17,5 @@ public interface SellerRepository extends JpaRepository<Seller,Long> {
     Seller findBySocialMedia(String socialMedia);
     List<Seller> findAllByRating(BigDecimal rating);
     List<Seller> findAllByReturnPolicy(String returnPolicy);
+    int deleteBySellerID(Long ID);
 }

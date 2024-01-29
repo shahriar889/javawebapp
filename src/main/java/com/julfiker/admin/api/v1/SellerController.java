@@ -1,12 +1,14 @@
 package com.julfiker.admin.api.v1;
 
 import com.julfiker.admin.dto.SellerDTO;
+import com.julfiker.admin.dto.SellerUserDtoWrapper;
+import com.julfiker.admin.dto.UserDto;
 import com.julfiker.admin.entity.Seller;
 import com.julfiker.admin.manager.SellerManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
@@ -49,22 +51,28 @@ public class SellerController {
     }
 
     @PostMapping("/create")
-    void createSeller(@RequestBody SellerDTO sellerDTO){
-        sellerManager.saveSeller(sellerDTO);
+    public void createSeller(@RequestBody SellerUserDtoWrapper wrapper){
+        sellerManager.saveSeller(wrapper.getSellerDTO(),wrapper.getUserDto());
     }
     @PutMapping("/update")
-    void updateSeller(@RequestBody SellerDTO sellerDTO){
+    public void updateSeller(@RequestBody SellerDTO sellerDTO){
         sellerManager.updateSeller(sellerDTO);
     }
 
     @DeleteMapping("/delete")
     @Transactional
     public void deleteSeller(@RequestParam Long ID){
+        System.out.println("Hit seller controller");
         sellerManager.deleteSellerByID(ID);
     }
     @PutMapping("/addRating")
     public void addRatingToSeller(@RequestParam Long ID, @RequestBody BigDecimal rating){
         sellerManager.setSellerRating(ID, rating);
+    }
+
+    @PutMapping("/addMedia")
+    public void addMediaToSeller(@RequestParam Long sellerID, @RequestParam Long mediaID){
+        sellerManager.addMediaToSeller(sellerID, mediaID);
     }
 
     @PutMapping("/addAssociationWithPM")

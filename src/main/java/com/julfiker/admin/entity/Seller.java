@@ -53,12 +53,12 @@ public class Seller {
     @Column
     private LocalDateTime last_updated;
 
-    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     @JoinColumn(name = "media_id", referencedColumnName = "media_id")
     private Media media;
 
-    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", referencedColumnName = "User_ID")
     private User user;
 
 

@@ -1,12 +1,14 @@
 package com.julfiker.admin.manager;
 
 import com.julfiker.admin.dto.PaymentMethodDTO;
+import com.julfiker.admin.dto.RoleDTO;
 import com.julfiker.admin.dto.SellerDTO;
-import com.julfiker.admin.entity.Item;
-import com.julfiker.admin.entity.PaymentMethod;
-import com.julfiker.admin.entity.Seller;
+import com.julfiker.admin.dto.UserDto;
+import com.julfiker.admin.entity.*;
+import com.julfiker.admin.repository.MediaRepository;
 import com.julfiker.admin.repository.PaymentMethodRepository;
 import com.julfiker.admin.repository.SellerRepository;
+import com.julfiker.admin.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,15 @@ public class SellerManagerImpl implements SellerManager{
 
     @Autowired
     SellerRepository sellerRepository;
+
+    @Autowired
+    UserManager userManager;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    MediaRepository mediaRepository;
 
     @Autowired
     PaymentMethodRepository paymentMethodRepository;
@@ -43,7 +54,7 @@ public class SellerManagerImpl implements SellerManager{
             itemIDList.add(item.getItemID());
         sellerDTO.setItemIDList(itemIDList);
         if(seller.getUser() != null)
-            sellerDTO.setUserID(seller.getUser().getId());
+            sellerDTO.setUserID(seller.getUser().getUserID());
         if (seller.getMedia() != null)
             sellerDTO.setMediaID(seller.getMedia().getMediaID());
         Set<PaymentMethod> pmList = seller.getPaymentMethods();
@@ -55,7 +66,7 @@ public class SellerManagerImpl implements SellerManager{
     }
 
     @Override
-    public void saveSeller(SellerDTO sellerDTO){
+    public void saveSeller(SellerDTO sellerDTO, UserDto userDto){
         if(sellerDTO.getName() == null || sellerDTO.getDescription() == null ||
         sellerDTO.getAddress() == null || sellerDTO.getSocialMedia() == null ||
         sellerDTO.getReturnPolicy() == null){
@@ -74,6 +85,11 @@ public class SellerManagerImpl implements SellerManager{
         seller.setItems(itemList);
         if(seller.getCreation_date() == null)
             seller.setCreation_date(LocalDateTime.now());
+        RoleDTO roleDTO = new RoleDTO();
+        roleDTO.setName("Seller");
+        Long userID = userManager.saveUserWithRole(userDto,roleDTO);
+        User user = userRepository.findByUserID(userID);
+        seller.setUser(user);
         sellerRepository.save(seller);
     }
 
@@ -104,7 +120,12 @@ public class SellerManagerImpl implements SellerManager{
 
     @Override
     public void deleteSellerByID(Long ID){
-        sellerRepository.deleteById(ID);
+        System.out.println("Hit seller service");
+        Seller seller = sellerRepository.findBySellerID(ID);
+        Long userID = seller.getUser().getUserID();
+        userRepository.deleteByUserID(userID);
+        int r = sellerRepository.deleteBySellerID(ID);
+        System.out.println(r);
     }
 
     @Override
@@ -195,6 +216,24 @@ public class SellerManagerImpl implements SellerManager{
         seller.setRating(newRating);
         seller.setNumRatings(curNumRatings+1L);
         seller.setLast_updated(LocalDateTime.now());
+        sellerRepository.save(seller);
+    }
+
+    @Override
+    public void addMediaToSeller(Long sellerID, Long mediaID){
+        Seller seller = sellerRepository.findBySellerID(sellerID);
+        if(seller == null){
+            System.out.println("Could not find seller with this ID");
+            return;
+        }
+        Media media = mediaRepository.findByMediaID(mediaID);
+        if(media == null){
+            System.out.println("Could not find media with this ID");
+            return;
+        }
+        seller.setMedia(media);
+        media.setSeller(seller);
+        mediaRepository.save(media);
         sellerRepository.save(seller);
     }
 

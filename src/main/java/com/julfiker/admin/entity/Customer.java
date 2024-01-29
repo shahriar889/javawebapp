@@ -34,7 +34,7 @@ public class Customer {
     private Media media;
 
     @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "User_ID")
     private User user;
 
     @Column(nullable = false)
