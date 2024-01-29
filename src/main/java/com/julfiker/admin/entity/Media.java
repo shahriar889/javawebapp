@@ -21,17 +21,17 @@ public class Media {
     @Column(name = "Media_ID")
     private Long mediaID;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String fileOriginalPath;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String fileThumbnailPath;
 
     @Column(nullable = false)
     private String fileExtension;
 
     @Column(nullable = false)
-    private double fileSize;
+    private Double fileSize;
 
     @Column(nullable = false)
     private LocalDateTime creation_date;

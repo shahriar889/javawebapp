@@ -18,16 +18,16 @@ public class CategoryController {
     CategoryManager categoryManager;
 
     @GetMapping("/getAll")
-    public List<Category> getAllCategories(){
+    public List<CategoryDto> getAllCategories(){
         return categoryManager.findAllCategories();
     }
     @GetMapping("/getByID")
-    public Category getCategoryByID(@RequestParam Long ID){
+    public CategoryDto getCategoryByID(@RequestParam Long ID){
         return categoryManager.findCategoryByID(ID);
     }
 
     @GetMapping("/getByName")
-    public Category getCategoryByID(@RequestParam String name){
+    public CategoryDto getCategoryByID(@RequestParam String name){
         return categoryManager.findCategoryByName(name);
     }
 

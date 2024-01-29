@@ -4,12 +4,9 @@ import com.julfiker.admin.dto.CategoryDto;
 import com.julfiker.admin.entity.Category;
 import com.julfiker.admin.entity.Item;
 import com.julfiker.admin.repository.CategoryRepository;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.security.PublicKey;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +18,30 @@ public class CategoryManagerImpl implements CategoryManager{
     @Autowired
     private CategoryRepository categoryRepository;
 
-    private void convertToCategory(CategoryDto categoryDto, Category category){
+    private CategoryDto convertToDTO(Category category){
+        CategoryDto categoryDto = new CategoryDto();
+        categoryDto.setCategoryID(category.getCategoryID());
+        categoryDto.setPerishable(category.getPerishable());
+        categoryDto.setName(category.getName());
+        categoryDto.setDescription(category.getDescription());
+        Category parentCategory = category.getParentCategory();
+        if (parentCategory != null) {
+            categoryDto.setParentID(parentCategory.getCategoryID());
+        }
+        categoryDto.setCreation_date(category.getCreation_date());
+        if(category.getLast_updated() != null)
+            categoryDto.setLast_updated(category.getLast_updated());
+        return categoryDto;
+    }
+
+
+    @Override
+    public void saveCategory(CategoryDto categoryDto){
+        Category category = new Category();
+        if(categoryDto.getName() == null || categoryDto.getDescription() == null){
+            System.out.println("While creating name or description cannot be empty");
+            return;
+        }
         category.setName(categoryDto.getName());
         category.setDescription(categoryDto.getDescription());
         if(categoryDto.getParentID() != null){
@@ -31,13 +51,6 @@ public class CategoryManagerImpl implements CategoryManager{
         if(categoryDto.getPerishable() != null){
             category.setPerishable(categoryDto.getPerishable());
         }
-
-    }
-
-    @Override
-    public void saveCategory(CategoryDto categoryDto){
-        Category category = new Category();
-        this.convertToCategory(categoryDto, category);
         List<Item> to_insert = new ArrayList<>();
         category.setItems(to_insert);
         if(category.getCreation_date() == null){
@@ -57,24 +70,48 @@ public class CategoryManagerImpl implements CategoryManager{
             System.out.println("Could not find any Category associated with the provided ID");
             return;
         }
+        if(categoryDto.getName() != null)
+            category.setName(categoryDto.getName());
+        if(categoryDto.getDescription() != null)
+            category.setDescription(categoryDto.getDescription());
+        if(categoryDto.getParentID() != null){
 
-        this.convertToCategory(categoryDto,category);
+            Category parent = categoryRepository.findByCategoryID(categoryDto.getParentID());
+            if(parent != null)
+                category.setParentCategory(parent);
+        }
         category.setLast_updated(LocalDateTime.now());
         categoryRepository.save(category);
 
     }
 
     @Override
-    public Category findCategoryByID(Long ID) {
-        return categoryRepository.findByCategoryID(ID);
+    public CategoryDto findCategoryByID(Long ID) {
+        Category category = categoryRepository.findByCategoryID(ID);
+        if(category == null){
+            System.out.println("Could find category with this ID");
+            return new CategoryDto();
+        }
+        return convertToDTO(category);
     }
     @Override
-    public List<Category> findAllCategories(){
-        return categoryRepository.findAll();
+    public List<CategoryDto> findAllCategories(){
+        List<Category> categoryList = categoryRepository.findAll();
+        List<CategoryDto> categoryDtoList = new ArrayList<>();
+        for(Category c: categoryList){
+            CategoryDto categoryDto = convertToDTO(c);
+            categoryDtoList.add(categoryDto);
+        }
+        return categoryDtoList;
     }
     @Override
-    public Category findCategoryByName(String name){
-        return categoryRepository.findByName(name);
+    public CategoryDto findCategoryByName(String name){
+       Category category = categoryRepository.findByName(name);
+        if(category == null){
+            System.out.println("Could find category with this name");
+            return new CategoryDto();
+        }
+        return convertToDTO(category);
     }
 
     @Override

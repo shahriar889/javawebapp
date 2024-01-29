@@ -8,7 +8,9 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -21,9 +23,9 @@ public class Seller {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Seller_ID")
-    private Long id;
+    private Long sellerID;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @Column(nullable = false, columnDefinition = "TEXT")
@@ -33,16 +35,14 @@ public class Seller {
     private BigDecimal rating;
 
     @Column(nullable = false)
-    private long numRatings;
+    private Long numRatings;
 
-    @Column(nullable = false)
-    private String socialMmedia;
+    @Column(nullable = false, unique = true)
+    private String socialMedia;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(nullable = false, columnDefinition = "TEXT", unique = true)
     private String address;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
-    private String acceptedPaymentMethods;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String returnPolicy;
@@ -64,4 +64,12 @@ public class Seller {
 
     @OneToMany(mappedBy = "seller")
     private List<Item> items;
+
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "seller_payment_methods",
+            joinColumns = @JoinColumn(name = "Seller_ID"),
+            inverseJoinColumns = @JoinColumn(name = "Payment_Method_ID")
+    )
+    private Set<PaymentMethod> paymentMethods = new HashSet<>();
 }
