@@ -171,8 +171,8 @@ public class CustomerManagerImpl implements CustomerManager{
             return;
         }
         PaymentInfo paymentInfo = new PaymentInfo();
-        paymentInfo.setCardNumber(paymentInfoDTO.getCardNumber());
-        paymentInfo.setCVV(paymentInfoDTO.getCVV());
+        paymentInfo.setCardNumber(passwordEncoder.encode(paymentInfoDTO.getCardNumber()));
+        paymentInfo.setCVV(passwordEncoder.encode(paymentInfoDTO.getCVV()));
         paymentInfo.setCardType(paymentInfoDTO.getCardType());
         paymentInfo.setExpirationDate(paymentInfoDTO.getExpirationDate());
         paymentInfo.setCreation_date(LocalDateTime.now());
