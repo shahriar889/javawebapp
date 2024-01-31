@@ -10,9 +10,6 @@ import java.util.List;
 public interface MediaRepository extends JpaRepository<Media, Long> {
     List<Media> findAll();
     Media findByMediaID(Long MediaID);
-    Media findByFileOriginalPath(String msg);
-    List<Media> findAllByFileExtension(String msg);
-    Media findByFileThumbnailPath(String msg);
 
     void deleteByMediaID(Long ID);
 

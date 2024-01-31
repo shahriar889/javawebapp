@@ -60,12 +60,8 @@ public class CategoryManagerImpl implements CategoryManager{
     }
 
     @Override
-    public void updateCategory(CategoryDto categoryDto){
-        if(categoryDto.getCategoryID() == null){
-            System.out.println("Cannot Update without ID");
-            return;
-        }
-        Category category = categoryRepository.findByCategoryID(categoryDto.getCategoryID());
+    public void updateCategory(CategoryDto categoryDto, Long ID){
+        Category category = categoryRepository.findByCategoryID(ID);
         if(category == null){
             System.out.println("Could not find any Category associated with the provided ID");
             return;
@@ -104,15 +100,7 @@ public class CategoryManagerImpl implements CategoryManager{
         }
         return categoryDtoList;
     }
-    @Override
-    public CategoryDto findCategoryByName(String name){
-       Category category = categoryRepository.findByName(name);
-        if(category == null){
-            System.out.println("Could find category with this name");
-            return new CategoryDto();
-        }
-        return convertToDTO(category);
-    }
+
 
     @Override
     public void deleteCategoryByID(Long ID){

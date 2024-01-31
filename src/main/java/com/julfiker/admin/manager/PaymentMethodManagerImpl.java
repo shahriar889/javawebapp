@@ -67,24 +67,10 @@ public class PaymentMethodManagerImpl implements PaymentMethodManager{
         }
         return convertToDTO(pm);
     }
-    @Override
-    public PaymentMethodDTO findByName(String name){
-
-        PaymentMethod pm = paymentMethodRepository.getPaymentMethodByName(name);
-        if(pm == null){
-            System.out.println("Could not find Payment Method with this Name");
-            return new PaymentMethodDTO();
-        }
-        return convertToDTO(pm);
-    }
 
     @Override
-    public void updatePaymentMethod(PaymentMethodDTO paymentMethodDTO){
-        if(paymentMethodDTO.getPaymentMethodID() == null){
-            System.out.println("Cannot update payment method without ID");
-            return;
-        }
-        PaymentMethod paymentMethod = paymentMethodRepository.getPaymentMethodByPaymentMethodID(paymentMethodDTO.getPaymentMethodID());
+    public void updatePaymentMethod(PaymentMethodDTO paymentMethodDTO, Long ID){
+        PaymentMethod paymentMethod = paymentMethodRepository.getPaymentMethodByPaymentMethodID(ID);
         if(paymentMethod == null){
             System.out.println("Could not find payment method associated with the ID");
             return;

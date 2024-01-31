@@ -21,7 +21,7 @@ public class Category {
     @Column(name = "Category_ID")
     private Long categoryID;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @Column(nullable = false, columnDefinition = "TEXT")

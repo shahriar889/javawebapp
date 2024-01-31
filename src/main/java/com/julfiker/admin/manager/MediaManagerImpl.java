@@ -1,13 +1,12 @@
 package com.julfiker.admin.manager;
 
 import com.julfiker.admin.dto.MediaDTO;
-import com.julfiker.admin.entity.Customer;
 import com.julfiker.admin.entity.Item;
 import com.julfiker.admin.entity.Media;
-import com.julfiker.admin.entity.Seller;
 import com.julfiker.admin.repository.MediaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -67,12 +66,8 @@ public class MediaManagerImpl implements MediaManager{
     }
 
     @Override
-    public void updateMedia(MediaDTO mediaDTO){
-        if(mediaDTO.getMediaID() == null){
-            System.out.println("Need media ID to find Media to update");
-            return;
-        }
-        Media media = mediaRepository.findByMediaID(mediaDTO.getMediaID());
+    public void updateMedia(MediaDTO mediaDTO, Long ID){
+        Media media = mediaRepository.findByMediaID(ID);
         if(media == null){
             System.out.println("Could not find the media associated with the given ID");
             return;
@@ -112,36 +107,7 @@ public class MediaManagerImpl implements MediaManager{
     }
 
     @Override
-    public MediaDTO findMediaByFileOriginalPath(String msg){
-        Media media = mediaRepository.findByFileOriginalPath(msg);
-        if(media == null){
-            System.out.println("Could not find find media with this OG Path");
-            return new MediaDTO();
-        }
-        return convertToDTO(media);
-    }
-
-    @Override
-    public MediaDTO findMediaByFileThumbnailPath(String msg){
-        Media media = mediaRepository.findByFileThumbnailPath(msg);
-        if(media == null){
-            System.out.println("Could not find find media with this Thumbnail Path");
-            return new MediaDTO();
-        }
-        return convertToDTO(media);
-    }
-
-    @Override
-    public List<MediaDTO> findAllMediaByFileExtension(String msg){
-        List<Media> mediaList = mediaRepository.findAllByFileExtension(msg);
-        List<MediaDTO> mediaDTOList = new ArrayList<>();
-        for(Media media : mediaList){
-            mediaDTOList.add(convertToDTO(media));
-        }
-        return mediaDTOList;
-    }
-
-    @Override
+    @Transactional
     public void deleteMediaByID(Long ID){
         mediaRepository.deleteByMediaID(ID);
     }

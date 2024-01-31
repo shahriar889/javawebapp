@@ -9,10 +9,10 @@ public interface CategoryManager {
 
     void saveCategory(CategoryDto categoryDto);
     CategoryDto findCategoryByID(Long ID);
-    CategoryDto findCategoryByName(String name);
+
     List<CategoryDto> findAllCategories();
 
     void deleteCategoryByID(Long ID);
 
-    void updateCategory(CategoryDto categoryDto);
+    void updateCategory(CategoryDto categoryDto, Long ID);
 }

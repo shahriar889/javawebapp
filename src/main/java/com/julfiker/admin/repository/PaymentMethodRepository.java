@@ -11,7 +11,6 @@ public interface PaymentMethodRepository extends JpaRepository<PaymentMethod, Lo
     List<PaymentMethod> findAll();
 
     PaymentMethod getPaymentMethodByPaymentMethodID(Long ID);
-    PaymentMethod getPaymentMethodByName(String name);
 
     void deleteByPaymentMethodID(Long ID);
 

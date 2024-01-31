@@ -8,14 +8,10 @@ import java.util.List;
 public interface MediaManager {
     void saveMedia(MediaDTO mediaDTO);
     MediaDTO findMediaByID(Long ID);
-    MediaDTO findMediaByFileOriginalPath(String msg);
-    MediaDTO findMediaByFileThumbnailPath(String msg);
-
-    List<MediaDTO> findAllMediaByFileExtension(String msg);
 
     List<MediaDTO> findAllMedia();
 
-    void updateMedia(MediaDTO mediaDTO);
+    void updateMedia(MediaDTO mediaDTO, Long ID);
     void deleteMediaByID(Long ID);
 
 }

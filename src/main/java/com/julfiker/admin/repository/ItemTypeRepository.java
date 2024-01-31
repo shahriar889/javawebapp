@@ -10,7 +10,5 @@ import java.util.List;
 public interface ItemTypeRepository extends JpaRepository<ItemType, Long> {
     List<ItemType> findAll();
     ItemType findByItemTypeID(Long ID);
-    ItemType findByName(String name);
-
     void deleteByItemTypeID(Long ID);
 }

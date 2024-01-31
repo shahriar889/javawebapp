@@ -27,8 +27,8 @@ public class Attribute {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "Attributes_Type_ID")
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "Attributes_Type_ID" )
     private Attributes_Type attributesType;
 
     @Column(nullable = false)

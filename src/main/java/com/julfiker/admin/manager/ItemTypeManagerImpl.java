@@ -49,12 +49,8 @@ public class ItemTypeManagerImpl implements ItemTypeManager{
     }
 
     @Override
-    public void updateItemType(ItemTypeDTO itemTypeDTO){
-        if(itemTypeDTO.getItemTypeID() == null){
-            System.out.println("Cannot update without ID");
-            return;
-        }
-        ItemType itemType = itemTypeRepository.findByItemTypeID(itemTypeDTO.getItemTypeID());
+    public void updateItemType(ItemTypeDTO itemTypeDTO, Long ID){
+        ItemType itemType = itemTypeRepository.findByItemTypeID(ID);
         if(itemType == null){
             System.out.println("Could not find item type with this ID");
             return;
@@ -91,13 +87,4 @@ public class ItemTypeManagerImpl implements ItemTypeManager{
         return convertToDTO(itemType);
     }
 
-    @Override
-    public ItemTypeDTO findItemTypeByName(String name){
-        ItemType itemType = itemTypeRepository.findByName(name);
-        if(itemType == null){
-            System.out.println("Could not Find item type with this name");
-            return new ItemTypeDTO();
-        }
-        return convertToDTO(itemType);
-    }
 }

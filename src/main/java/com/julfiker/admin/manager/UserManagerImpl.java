@@ -88,17 +88,6 @@ public class UserManagerImpl implements UserManager {
     }
 
     @Override
-    public UserDto findUserByName(String name) {
-
-        User user = userRepository.findByName(name);
-        if(user == null){
-            System.out.println("Could not find any user with this name");
-            return new UserDto();
-        }
-        return mapToUserDto(user);
-    }
-
-    @Override
     public List<UserDto> findAllUsers() {
         List<User> users = userRepository.findAll();
 
@@ -135,13 +124,8 @@ public class UserManagerImpl implements UserManager {
     }
 
     @Override
-    public void updateUser(UserDto userDto){
-        Long userID = userDto.getUserID();
-        if(userID == null){
-            System.out.println("ID cannot be null.");
-            return;
-        }
-        User user = userRepository.findByUserID(userID);
+    public void updateUser(UserDto userDto, Long ID){
+        User user = userRepository.findByUserID(ID);
         if(user == null){
             System.out.println("Could not find any User with this ID");
             return;
@@ -159,16 +143,6 @@ public class UserManagerImpl implements UserManager {
     @Override
     public void deleteUserByID(Long ID){
         userRepository.deleteByUserID(ID);
-    }
-
-    @Override
-    public UserDto findUserByPhone(String phone){
-        User user = userRepository.findByPhone(phone);
-        if(user == null){
-            System.out.println("Could not find any user with this phone number");
-            return new UserDto();
-        }
-        return mapToUserDto(user);
     }
 
     @Override

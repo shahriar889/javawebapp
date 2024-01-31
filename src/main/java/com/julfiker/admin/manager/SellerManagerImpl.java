@@ -1,6 +1,6 @@
 package com.julfiker.admin.manager;
 
-import com.julfiker.admin.dto.PaymentMethodDTO;
+
 import com.julfiker.admin.dto.RoleDTO;
 import com.julfiker.admin.dto.SellerDTO;
 import com.julfiker.admin.dto.UserDto;
@@ -45,7 +45,7 @@ public class SellerManagerImpl implements SellerManager{
         sellerDTO.setName(seller.getName());
         sellerDTO.setDescription(seller.getDescription());
         sellerDTO.setRating(seller.getRating());
-        sellerDTO.setNumRatings(sellerDTO.getNumRatings());
+        sellerDTO.setNumRatings(seller.getNumRatings());
         sellerDTO.setSocialMedia(seller.getSocialMedia());
         sellerDTO.setAddress(seller.getAddress());
         List<Item> items = seller.getItems();
@@ -62,6 +62,10 @@ public class SellerManagerImpl implements SellerManager{
         for(PaymentMethod pm: pmList)
             pmIDLIST.add(pm.getPaymentMethodID());
         sellerDTO.setPaymentMethodIDList(pmIDLIST);
+        sellerDTO.setCreation_date(seller.getCreation_date());
+        sellerDTO.setReturnPolicy(seller.getReturnPolicy());
+        if(seller.getLast_updated() != null)
+            sellerDTO.setLast_updated(seller.getLast_updated());
         return sellerDTO;
     }
 
@@ -94,12 +98,8 @@ public class SellerManagerImpl implements SellerManager{
     }
 
     @Override
-    public void updateSeller(SellerDTO sellerDTO){
-        if(sellerDTO.getSellerID() == null){
-            System.out.println("Cannot update seller without ID");
-            return;
-        }
-        Seller seller = sellerRepository.findBySellerID(sellerDTO.getSellerID());
+    public void updateSeller(SellerDTO sellerDTO, Long ID){
+        Seller seller = sellerRepository.findBySellerID(ID);
         if(seller == null){
             System.out.println("Could not find seller associated with the given ID");
             return;
@@ -139,57 +139,7 @@ public class SellerManagerImpl implements SellerManager{
         return convertToDTO(seller);
     }
 
-    @Override
-    public SellerDTO findByName(String name){
 
-        Seller seller = sellerRepository.findByName(name);
-        if(seller == null){
-            System.out.println("Could not find find seller with this name");
-            return new SellerDTO();
-        }
-        return convertToDTO(seller);
-    }
-
-    @Override
-    public SellerDTO findByAddress(String address){
-
-        Seller seller = sellerRepository.findByAddress(address);
-        if(seller == null){
-            System.out.println("Could not find find seller with this address");
-            return new SellerDTO();
-        }
-        return convertToDTO(seller);
-    }
-
-    @Override
-    public SellerDTO findBySocialMedia(String socialMedia){
-
-        Seller seller = sellerRepository.findBySocialMedia(socialMedia);
-        if(seller == null){
-            System.out.println("Could not find find seller with this social Media");
-            return new SellerDTO();
-        }
-        return convertToDTO(seller);
-    }
-
-    @Override
-    public List<SellerDTO> findAllByRating(BigDecimal rating){
-
-        List<Seller> sellerList = sellerRepository.findAllByRating(rating);
-        List<SellerDTO> sellerDTOS = new ArrayList<>();
-        for(Seller seller : sellerList)
-            sellerDTOS.add(convertToDTO(seller));
-        return sellerDTOS;
-    }
-
-    @Override
-    public List<SellerDTO> findAllByReturnPolicy(String returnPolicy){
-        List<Seller> sellerList = sellerRepository.findAllByReturnPolicy(returnPolicy);
-        List<SellerDTO> sellerDTOS = new ArrayList<>();
-        for(Seller seller : sellerList)
-            sellerDTOS.add(convertToDTO(seller));
-        return sellerDTOS;
-    }
 
     @Override
     public List<SellerDTO> findAll(){
@@ -226,6 +176,11 @@ public class SellerManagerImpl implements SellerManager{
             System.out.println("Could not find seller with this ID");
             return;
         }
+
+        Media oldMedia = new Media();
+        if(seller.getMedia() != null){
+            oldMedia = seller.getMedia();
+        }
         Media media = mediaRepository.findByMediaID(mediaID);
         if(media == null){
             System.out.println("Could not find media with this ID");
@@ -235,6 +190,8 @@ public class SellerManagerImpl implements SellerManager{
         media.setSeller(seller);
         mediaRepository.save(media);
         sellerRepository.save(seller);
+        if(oldMedia.getMediaID() != null)
+            mediaRepository.deleteByMediaID(oldMedia.getMediaID());
     }
 
     @Override

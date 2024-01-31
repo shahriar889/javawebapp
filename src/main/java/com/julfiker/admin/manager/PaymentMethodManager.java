@@ -9,7 +9,7 @@ public interface PaymentMethodManager {
     void savePaymentMethod(PaymentMethodDTO paymentMethodDTO);
     List<PaymentMethodDTO> findAll();
     PaymentMethodDTO findByID(Long ID);
-    PaymentMethodDTO findByName(String name);
-    void updatePaymentMethod(PaymentMethodDTO paymentMethodDTO);
+
+    void updatePaymentMethod(PaymentMethodDTO paymentMethodDTO, Long ID);
     void deletePaymentMethod(Long ID);
 }

@@ -10,15 +10,10 @@ import java.util.List;
 public interface SellerManager {
 
     void saveSeller(SellerDTO sellerDTO, UserDto userDto);
-    void updateSeller(SellerDTO sellerDTO);
+    void updateSeller(SellerDTO sellerDTO, Long ID);
     void deleteSellerByID(Long ID);
 
     SellerDTO findBySellerID(Long ID);
-    SellerDTO findByName(String name);
-    SellerDTO findByAddress(String address);
-    SellerDTO findBySocialMedia(String socialMedia);
-    List<SellerDTO> findAllByRating(BigDecimal rating);
-    List<SellerDTO> findAllByReturnPolicy(String returnPolicy);
     List<SellerDTO> findAll();
 
     void addMediaToSeller(Long sellerID, Long mediaID);

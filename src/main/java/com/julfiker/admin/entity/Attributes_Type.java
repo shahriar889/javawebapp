@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -20,7 +21,7 @@ public class Attributes_Type {
     @Column(name = "Attributes_Type_ID")
     private Long attributesTypeID;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
 
@@ -29,4 +30,7 @@ public class Attributes_Type {
 
     @Column
     private LocalDateTime last_updated;
+
+    @OneToMany(mappedBy = "attributesType")
+    List<Attribute> attributes;
 }

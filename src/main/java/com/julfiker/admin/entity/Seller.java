@@ -40,7 +40,7 @@ public class Seller {
     @Column(nullable = false, unique = true)
     private String socialMedia;
 
-    @Column(nullable = false, columnDefinition = "TEXT", unique = true)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String address;
 
 

@@ -2,7 +2,6 @@ package com.julfiker.admin.manager;
 
 import com.julfiker.admin.dto.RoleDTO;
 import com.julfiker.admin.dto.UserDto;
-import com.julfiker.admin.entity.User;
 
 
 import java.util.List;
@@ -16,11 +15,7 @@ public interface UserManager {
 
     List<UserDto> findAllUsers();
 
-    UserDto findUserByName(String name);
-
-    UserDto findUserByPhone(String phone);
-
-    void updateUser(UserDto userDto);
+    void updateUser(UserDto userDto, Long ID);
     void deleteUserByID(Long ID);
 
     UserDto findUserByID(Long ID);

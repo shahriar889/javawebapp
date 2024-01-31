@@ -30,12 +30,8 @@ public class RoleManagerImpl implements RoleManager{
     }
 
     @Override
-    public void updateRole(RoleDTO roleDTO){
-        if(roleDTO.getRoleID() == null){
-            System.out.println("Cannot update role without ID");
-            return;
-        }
-        Role role = roleRepository.findByRoleID(roleDTO.getRoleID());
+    public void updateRole(RoleDTO roleDTO, Long ID){
+        Role role = roleRepository.findByRoleID(ID);
         if(role == null){
             System.out.println("Could not find role with this ID");
             return;
@@ -61,15 +57,6 @@ public class RoleManagerImpl implements RoleManager{
         return convertToDTO(role);
     }
 
-    @Override
-    public RoleDTO findRoleByName(String name){
-        Role role = roleRepository.findByName(name);
-        if(role == null){
-            System.out.println("Could not find Role with this name");
-            return new RoleDTO();
-        }
-        return convertToDTO(role);
-    }
 
     @Override
     public List<RoleDTO> findAllRoles(){
