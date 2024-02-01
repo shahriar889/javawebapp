@@ -17,7 +17,7 @@ public class Attributes_TypeManagerImpl implements Attributes_TypeManager {
     @Autowired
     Attributes_TypeRepository attributesTypeRepository;
 
-    private Attributes_TypeDTO convertToDTO(Attributes_Type attributesType) {
+    public Attributes_TypeDTO convertToDTO(Attributes_Type attributesType) {
         Attributes_TypeDTO attributesTypeDTO = new Attributes_TypeDTO();
         attributesTypeDTO.setAttributesTypeID(attributesType.getAttributesTypeID());
         attributesTypeDTO.setName(attributesType.getName());

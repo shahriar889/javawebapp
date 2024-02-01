@@ -68,7 +68,7 @@ public class RoleManagerImpl implements RoleManager{
 
     }
 
-    private RoleDTO convertToDTO(Role role){
+    public RoleDTO convertToDTO(Role role){
         RoleDTO roleDTO = new RoleDTO();
         roleDTO.setName(role.getName());
         roleDTO.setRoleID(role.getRoleID());

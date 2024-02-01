@@ -31,7 +31,7 @@ public class CustomerManagerImpl implements CustomerManager{
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    private CustomerDTO convertToDTO(Customer customer){
+    public CustomerDTO convertToDTO(Customer customer){
         CustomerDTO customerDTO = new CustomerDTO();
         customerDTO.setName(customer.getName());
         customerDTO.setDescription(customer.getDescription());
@@ -55,7 +55,7 @@ public class CustomerManagerImpl implements CustomerManager{
         return customerDTO;
     }
 
-    private PaymentInfoDTO convertToPI_DTO(PaymentInfo paymentInfo){
+    public PaymentInfoDTO convertToPI_DTO(PaymentInfo paymentInfo){
         PaymentInfoDTO paymentInfoDTO = new PaymentInfoDTO();
         paymentInfoDTO.setPaymentInfoID(paymentInfo.getPaymentInfoID());
         paymentInfoDTO.setCardType(paymentInfo.getCardType());
@@ -183,4 +183,28 @@ public class CustomerManagerImpl implements CustomerManager{
         customerRepository.save(customer);
 
     }
+
+    @Override
+    public List<PaymentInfoDTO> getAllPIByCustomer(Long ID) {
+        Customer customer = customerRepository.findByCustomerID(ID);
+        List<PaymentInfo> paymentInfos = paymentInfoRepository.findAllByCustomer(customer);
+        List<PaymentInfoDTO> paymentInfoDTOS = new ArrayList<>();
+        for(PaymentInfo PI: paymentInfos)
+            paymentInfoDTOS.add(convertToPI_DTO(PI));
+        return paymentInfoDTOS;
+    }
+
+    @Override
+    @Transactional
+    public void deletePIFromCustomer(Long ID, Long ID2){
+        PaymentInfo info = paymentInfoRepository.findByPaymentInfoID(ID2);
+        if(!info.getCustomer().getCustomerID().equals(ID)){
+            System.out.println("This payment info doesnt belong to the provided customer.");
+            return;
+        }
+        Customer customer = info.getCustomer();
+        customer.getPaymentInfos().remove(info);
+        paymentInfoRepository.deleteByPaymentInfoID(ID2);
+    }
+
 }

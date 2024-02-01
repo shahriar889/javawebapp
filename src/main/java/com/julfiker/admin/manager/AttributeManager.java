@@ -2,6 +2,7 @@ package com.julfiker.admin.manager;
 
 import com.julfiker.admin.dto.AttributeDTO;
 import com.julfiker.admin.dto.Attributes_TypeDTO;
+import com.julfiker.admin.entity.Attribute;
 
 import java.util.List;
 
@@ -12,5 +13,7 @@ public interface AttributeManager {
     void deleteByAttributeID(Long ID);
     AttributeDTO findAttributeByID(Long ID);
     List<AttributeDTO> findAllAttributes();
+
+    AttributeDTO convertToDTO(Attribute attribute);
 
 }

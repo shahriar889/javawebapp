@@ -18,7 +18,8 @@ public class MediaManagerImpl implements MediaManager{
     @Autowired
     private MediaRepository mediaRepository;
 
-    private MediaDTO convertToDTO(Media media){
+    @Override
+    public MediaDTO convertToDTO(Media media){
         MediaDTO mediaDTO = new MediaDTO();
         mediaDTO.setMediaID(media.getMediaID());
         mediaDTO.setFileOriginalPath(media.getFileOriginalPath());

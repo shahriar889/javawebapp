@@ -10,6 +10,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -35,10 +36,10 @@ public class Item {
     private BigDecimal rating;
 
     @Column(nullable = false)
-    private long num_ratings;
+    private Long num_ratings;
 
     @Column(nullable = false)
-    private long stock_quantity;
+    private Long stock_quantity;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
@@ -51,7 +52,7 @@ public class Item {
     private LocalDateTime last_updated;
 
     @ManyToOne
-    @JoinColumn(name = "Seller_ID")
+    @JoinColumn(name = "Seller_ID", nullable = false)
     private Seller seller;
 
 
@@ -84,10 +85,10 @@ public class Item {
     )
     private Set<Media> medias = new HashSet<>();
 
-    @OneToOne(mappedBy = "item", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    private CartItem cartItem;
+    @OneToMany(mappedBy = "item", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private List<CartItem> cartItems;
 
-    @OneToOne(mappedBy = "item", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    private OrderItem orderItem;
+    @OneToMany(mappedBy = "item", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private List<OrderItem> orderItems;
 
 }

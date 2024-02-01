@@ -18,7 +18,8 @@ public class CategoryManagerImpl implements CategoryManager{
     @Autowired
     private CategoryRepository categoryRepository;
 
-    private CategoryDto convertToDTO(Category category){
+    @Override
+    public CategoryDto convertToDTO(Category category){
         CategoryDto categoryDto = new CategoryDto();
         categoryDto.setCategoryID(category.getCategoryID());
         categoryDto.setPerishable(category.getPerishable());

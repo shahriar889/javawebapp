@@ -39,7 +39,7 @@ public class SellerManagerImpl implements SellerManager{
     private final Long defaultNumRating = 0L;
     private final BigDecimal defaultRating = BigDecimal.valueOf(0.0);
 
-    private SellerDTO convertToDTO(Seller seller){
+    public SellerDTO convertToDTO(Seller seller){
         SellerDTO sellerDTO = new SellerDTO();
         sellerDTO.setSellerID(seller.getSellerID());
         sellerDTO.setName(seller.getName());

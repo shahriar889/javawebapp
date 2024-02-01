@@ -59,5 +59,20 @@ public class CustomerController {
         customerManager.savePIForCustomer(ID, paymentInfoDTO);
     }
 
+    @GetMapping("/customers/{ID}/payment-infos")
+    public List<PaymentInfoDTO> getAllPaymentInfos(@PathVariable Long ID, @RequestParam(required = false) String cardType){
+        return customerManager.getAllPIByCustomer(ID).stream()
+                .filter(paymentInfoDTO -> (cardType == null || paymentInfoDTO.getCardType().equals(cardType)))
+                .collect(Collectors.toList());
+    }
+
+    @DeleteMapping("/customers/{ID}/payment-infos/{ID2}")
+    @Transactional
+    void deleteCustomersPIByID(@PathVariable Long ID, @PathVariable Long ID2){
+        customerManager.deletePIFromCustomer(ID, ID2);
+    }
+
+
+
 
 }

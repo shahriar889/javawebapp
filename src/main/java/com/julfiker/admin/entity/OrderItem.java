@@ -31,7 +31,7 @@ public class OrderItem {
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @ManyToOne (cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumn(name = "item_id", referencedColumnName = "item_id")
     private Item item;
 

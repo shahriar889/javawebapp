@@ -13,5 +13,6 @@ public interface MediaManager {
 
     void updateMedia(MediaDTO mediaDTO, Long ID);
     void deleteMediaByID(Long ID);
+    MediaDTO convertToDTO(Media media);
 
 }

@@ -64,4 +64,7 @@ public class User
     @OneToOne(mappedBy = "user", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private Seller seller;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    private DeliveryMan deliveryMan;
+
 }

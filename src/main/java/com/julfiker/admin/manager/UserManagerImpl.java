@@ -97,7 +97,7 @@ public class UserManagerImpl implements UserManager {
                 .collect(Collectors.toList());
     }
 
-    private UserDto mapToUserDto(User user){
+    public UserDto mapToUserDto(User user){
         UserDto userDto = new UserDto();
 //        String[] str = user.getName().split(" ");
 //        userDto.setFirstName(str[0]);

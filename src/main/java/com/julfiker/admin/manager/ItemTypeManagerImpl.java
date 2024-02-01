@@ -17,7 +17,7 @@ public class ItemTypeManagerImpl implements ItemTypeManager{
     @Autowired
     private ItemTypeRepository itemTypeRepository;
 
-    private ItemTypeDTO convertToDTO(ItemType itemType){
+    public ItemTypeDTO convertToDTO(ItemType itemType){
         ItemTypeDTO itemTypeDTO = new ItemTypeDTO();
         itemTypeDTO.setItemTypeID(itemType.getItemTypeID());
         itemTypeDTO.setName(itemType.getName());

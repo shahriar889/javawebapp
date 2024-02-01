@@ -36,6 +36,9 @@ public class Order {
     @JoinColumn(name = "customer_id", referencedColumnName = "customer_id")
     private Customer customer;
 
+    @OneToOne(mappedBy = "order")
+    private ShippingMethod shippingMethod;
+
     @Column(nullable = false)
     private LocalDateTime creation_date;
 

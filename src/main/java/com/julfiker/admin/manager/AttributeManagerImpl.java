@@ -23,7 +23,8 @@ public class AttributeManagerImpl implements AttributeManager{
     @Autowired
     Attributes_TypeRepository attributesTypeRepository;
 
-    private AttributeDTO convertToDTO(Attribute attribute){
+    @Override
+    public AttributeDTO convertToDTO(Attribute attribute){
         AttributeDTO attributeDTO = new AttributeDTO();
         attributeDTO.setAttributeID(attribute.getAttributeID());
         attributeDTO.setName(attribute.getName());
