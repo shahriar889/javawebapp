@@ -190,8 +190,12 @@ public class SellerManagerImpl implements SellerManager{
         media.setSeller(seller);
         mediaRepository.save(media);
         sellerRepository.save(seller);
-        if(oldMedia.getMediaID() != null)
-            mediaRepository.deleteByMediaID(oldMedia.getMediaID());
+        if(oldMedia.getMediaID() != null) {
+            if (oldMedia.getCustomer() == null)
+                mediaRepository.deleteByMediaID(oldMedia.getMediaID());
+            else
+                oldMedia.setSeller(null);
+        }
     }
 
     @Override

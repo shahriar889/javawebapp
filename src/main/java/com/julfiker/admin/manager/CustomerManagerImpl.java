@@ -154,8 +154,12 @@ public class CustomerManagerImpl implements CustomerManager{
         media.setCustomer(customer);
         mediaRepository.save(media);
         customerRepository.save(customer);
-        if(oldMedia.getMediaID() != null)
-            mediaRepository.deleteByMediaID(oldMedia.getMediaID());
+        if(oldMedia.getMediaID() != null) {
+            if (oldMedia.getSeller() != null)
+                mediaRepository.deleteByMediaID(oldMedia.getMediaID());
+            else
+                oldMedia.setCustomer(null);
+        }
     }
 
     @Override

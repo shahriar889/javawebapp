@@ -59,6 +59,8 @@ public class AttributeManagerImpl implements AttributeManager{
             attributesType.setCreation_date(LocalDateTime.now());
             attributesType.setAttributes(new ArrayList<>());
         }
+        else
+            attributesType.setLast_updated(LocalDateTime.now());
         attribute.setAttributesType(attributesType);
         attributesType.getAttributes().add(attribute);
         attributeRepository.save(attribute);

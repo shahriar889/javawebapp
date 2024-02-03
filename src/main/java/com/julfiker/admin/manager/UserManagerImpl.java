@@ -65,6 +65,8 @@ public class UserManagerImpl implements UserManager {
             role.setName(roleDTO.getName());
             role.setCreation_date(LocalDateTime.now());
         }
+        else
+            role.setLast_updated(LocalDateTime.now());
         Set<Role> roles = new HashSet<>();
         List<User> users = new ArrayList<>();
         roles.add(role);
