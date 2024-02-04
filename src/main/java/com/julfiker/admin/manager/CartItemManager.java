@@ -1,16 +1,20 @@
 package com.julfiker.admin.manager;
 
+import com.julfiker.admin.dto.CartDTO;
 import com.julfiker.admin.dto.CartItemDTO;
+import com.julfiker.admin.entity.CartItem;
 
 import java.util.List;
 
 public interface CartItemManager {
 
     void saveCartItem(CartItemDTO cartItemDTO);
-    void updateCartItem(CartItemDTO cartItemDTO);
+    void updateCartItem(Long ID, CartItemDTO cartItemDTO);
     void deleteCartItemByID(Long ID);
     List<CartItemDTO> findAllCartItems(String name);
-    CartItemDTO findCartItemByID(Long ID);
+    CartItemDTO findByCartItemByID(Long ID);
 
-    void addItemToCart(Long ID, Long ID2);
+
+    CartItemDTO convertToDTO(CartItem cartItem);
+
 }

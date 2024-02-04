@@ -5,17 +5,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
-@Getter
 @Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CartItemDTO {
-    private Long CartItemID;
-    private Long ItemID;
-    private Long CartID;
-    private Integer quantity;
+public class CartDTO {
+    private Long cartID;
+    private List<Long> cartItemIDs;
+    private BigDecimal totalPrice;
+    private Long customerID;
     private LocalDateTime creation_date;
     private LocalDateTime last_updated;
 }
