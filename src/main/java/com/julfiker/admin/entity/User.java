@@ -7,10 +7,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.jpa.repository.Temporal;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
+import static javax.persistence.TemporalType.TIMESTAMP;
 
 @Getter
 @Setter
@@ -52,8 +56,8 @@ public class User
     @Column(nullable = false)
     private boolean status;
 
-    @Column(nullable = false)
-    private LocalDateTime creation_date;
+    @Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private LocalDateTime creation_date = LocalDateTime.now();
 
     @Column
     private LocalDateTime last_updated;

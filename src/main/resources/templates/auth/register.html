@@ -40,18 +40,18 @@
                                    th:object="${user}">
 
                                 <div class="mb-3">
-                                    <label for="fName" class="form-label">First Name</label>
+                                    <label for="fName" class="form-label">Name</label>
                                     <input name="firstName" class="form-control" type="text" id="fName" placeholder="Enter your first name"
-                                           th:field="*{firstName}" required>
-                                    <p th:errors = "${firstName}" class="text-danger"
-                                       th:if="${#fields.hasErrors('firstName')}"></p>
+                                           th:field="*{name}" required>
+                                    <p th:errors = "${name}" class="text-danger"
+                                       th:if="${#fields.hasErrors('name')}"></p>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="lname" class="form-label">Last Name</label>
-                                    <input  name="lastName" class="form-control" type="text" id="lname"
-                                            placeholder="Enter your name"  th:field="*{lastName}" required >
-                                    <p th:errors = "*{lastName}" class="text-danger"
-                                       th:if="${#fields.hasErrors('lastName')}"></p>
+                                    <label for="phone" class="form-label">Phone</label>
+                                    <input  name="phone" class="form-control" type="text" id="phone"
+                                            placeholder="Enter your Phone number"  th:field="*{phone}" required >
+                                    <p th:errors = "*{phone}" class="text-danger"
+                                       th:if="${#fields.hasErrors('phone')}"></p>
                                 </div>
                                 <div class="mb-3">
                                     <label for="emailaddress" class="form-label">Email address</label>

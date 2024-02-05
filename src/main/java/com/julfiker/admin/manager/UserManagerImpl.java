@@ -36,6 +36,8 @@ public class UserManagerImpl implements UserManager {
         User user = new User();
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
+        user.setCreation_date(LocalDateTime.now());
+        user.setPhone(userDto.getPhone());
         // encrypt the password using spring security
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
@@ -43,9 +45,11 @@ public class UserManagerImpl implements UserManager {
         if(role == null){
             role = checkRoleExist();
         }
+        role.setCreation_date(LocalDateTime.now());
         Set<Role> userRoles = new HashSet<>();
         userRoles.add(role);
         user.setRoles(userRoles);
+        System.out.println(user);
         userRepository.save(user);
     }
 
@@ -122,6 +126,7 @@ public class UserManagerImpl implements UserManager {
     private Role checkRoleExist(){
         Role role = new Role();
         role.setName("ROLE_ADMIN");
+        role.setCreation_date(LocalDateTime.now());
         return roleRepository.save(role);
     }
 

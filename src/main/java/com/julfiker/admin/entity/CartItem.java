@@ -31,8 +31,8 @@ public class CartItem {
     @JoinColumn(name = "cart_id", nullable = false)
     private Cart cart;
 
-    @ManyToOne (cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    @JoinColumn(name = "item_id", referencedColumnName = "item_id")
+    @ManyToOne
+    @JoinColumn(name = "item_id", nullable = false)
     private Item item;
 
     @Column(nullable = false)

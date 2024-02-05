@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -50,9 +51,12 @@ public class AuthenticateController {
         }
 
         if(result.hasErrors()){
+            userDto.setCreation_Date(LocalDateTime.now());
+            userDto.setStatus(true);
             model.addAttribute("user", userDto);
             return "auth/register";
         }
+
 
         userManager.saveUser(userDto);
         return "redirect:/register?success";

@@ -4,6 +4,7 @@ import com.julfiker.admin.dto.CartDTO;
 import com.julfiker.admin.dto.CartItemDTO;
 import com.julfiker.admin.entity.Cart;
 import com.julfiker.admin.entity.CartItem;
+import com.julfiker.admin.entity.Item;
 import com.julfiker.admin.manager.CartItemManager;
 import com.julfiker.admin.repository.CartItemRepository;
 import com.julfiker.admin.repository.CartRepository;
@@ -47,11 +48,20 @@ public class CartItemManagerImpl implements CartItemManager {
             System.out.println("Not enough info to make cart item");
             return;
         }
+        Item item = itemRepository.findByItemID(cartItemDTO.getItemID());
         CartItem cartItem = new CartItem();
-        cartItem.setItem(itemRepository.findByItemID(cartItemDTO.getItemID()));
+        cartItem.setItem(item);
         cartItem.setQuantity(cartItem.getQuantity());
-        cartItem.setCart(cartRepository.findCartByCartID(cartItemDTO.getCartID()));
+        Cart cart = cartRepository.findCartByCartID(cartItemDTO.getCartID());
+        cartItem.setCart(cart);
+        cart.getCartItems().add(cartItem);
         cartItem.setCreation_date(LocalDateTime.now());
+        item.getCartItems().add(cartItem);
+        cartRepository.save(cart);
+        itemRepository.save(item);
+        cartItemRepository.save(cartItem);
+
+
 
 
     }

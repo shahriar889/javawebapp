@@ -9,6 +9,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -85,8 +86,9 @@ public class Item {
     )
     private Set<Media> medias = new HashSet<>();
 
-    @OneToMany(mappedBy = "item", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    private List<CartItem> cartItems;
+    @OneToMany (mappedBy = "item", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    List<CartItem> cartItems;
+
 
     @OneToMany(mappedBy = "item", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<OrderItem> orderItems;
