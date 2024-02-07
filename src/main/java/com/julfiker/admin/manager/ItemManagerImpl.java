@@ -104,7 +104,11 @@ public class ItemManagerImpl implements ItemManager{
             System.out.println("Could not find the itemType");
             return;
         }
-        Item item = new Item();
+        Item item = itemRepository.findByItemID(itemDTO.getItemID());
+        if(item == null)
+            item = new Item();
+        else
+            item.setLast_updated(LocalDateTime.now());
         item.setName(itemDTO.getName());
         item.setDescription(itemDTO.getDescription());
         item.setCreation_date(LocalDateTime.now());
@@ -127,7 +131,9 @@ public class ItemManagerImpl implements ItemManager{
         }
         Set<Long> mediaIDSet = itemDTO.getMediaIDs();
         if(mediaIDSet != null && !mediaIDSet.isEmpty()){
-            Set<Media> mediaSet = new HashSet<>();
+            Set<Media> mediaSet = item.getMedias();
+            if(mediaSet == null)
+                mediaSet = new HashSet<>();
             for(Long ID : mediaIDSet) {
                 Media media = mediaRepository.findByMediaID(ID);
                 List<Item> items = new ArrayList<>();

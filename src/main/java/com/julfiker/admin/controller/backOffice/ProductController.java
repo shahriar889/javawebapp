@@ -7,6 +7,7 @@ import com.julfiker.admin.repository.MediaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
@@ -61,6 +62,7 @@ public class ProductController {
                            @RequestParam(value = "file", required = false) MultipartFile[] files) {
 
         if (result.hasErrors()) {
+            System.out.println(result.getAllErrors());
             List<CategoryDto> categories = categoryManager.findAllCategories();
             List<ItemTypeDTO> itemTypeDTOS = itemTypeManager.findAllItemType();
             List<SellerDTO> sellerDTOS = sellerManager.findAll();
@@ -149,7 +151,8 @@ public class ProductController {
         Set<Long> mediaIDs = itemDTO.getMediaIDs();
         if(mediaIDs == null)
             mediaIDs = new HashSet<>();
-        mediaIDs.add(savedMediaID);
+        if(savedMediaID != 0)
+            mediaIDs.add(savedMediaID);
         itemDTO.setMediaIDs(mediaIDs);
         itemManager.saveItem(itemDTO);
         return "redirect:/items";
@@ -168,10 +171,40 @@ public class ProductController {
     @GetMapping("items/edit/{ID}")
     public String editItem(@PathVariable Long ID, Model model){
 
+        List<CategoryDto> categories = categoryManager.findAllCategories();
+        List<ItemTypeDTO> itemTypeDTOS = itemTypeManager.findAllItemType();
+        List<SellerDTO> sellerDTOS = sellerManager.findAll();
+
+        model.addAttribute("sellers", sellerDTOS);
+        model.addAttribute("itemTypes", itemTypeDTOS);
+        model.addAttribute("categories", categories);
         ItemDTO itemDTO = itemManager.findItemByID(ID);
         model.addAttribute("item",itemDTO);
         return "admin/edit-item";
     }
+
+
+    @DeleteMapping("/items/{ID}/delete")
+    public String deleteItemByID(@PathVariable Long ID) {
+        itemManager.deleteItem(ID);
+        return "redirect:/items";
+    }
+
+    @GetMapping("items/{ID}/details")
+    public String itemDetails(@PathVariable Long ID, Model model){
+        System.out.println("in details");
+        ItemDTO itemDTO = itemManager.findItemByID(ID);
+        Set<MediaDTO> mediaDTOS = itemManager.getAllItemMedias(ID);
+        List<ItemDTO> itemDTOS = itemManager.findAll();
+        List<MediaDTO> mediaDTOList = mediaManager.findAllMedia();
+        model.addAttribute("item",itemDTO);
+//        model.addAttribute("media", mediaDTOS);
+        model.addAttribute("items", itemDTOS);
+        model.addAttribute("media", mediaDTOList);
+        System.out.println(mediaDTOS.size());
+        return "admin/item-details";
+    }
+
 }
 
 
