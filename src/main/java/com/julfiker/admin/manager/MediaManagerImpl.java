@@ -112,4 +112,10 @@ public class MediaManagerImpl implements MediaManager{
     public void deleteMediaByID(Long ID){
         mediaRepository.deleteByMediaID(ID);
     }
+
+    @Override
+    public Long getMediaID(String msg){
+        Media media = mediaRepository.findByFileOriginalPath(msg);
+        return media.getMediaID();
+    }
 }

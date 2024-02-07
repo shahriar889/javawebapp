@@ -78,7 +78,8 @@ public class Item {
     )
     private Set<Attribute> attributes = new HashSet<>();
 
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     @JoinTable(
             name = "item_medias",
             joinColumns = @JoinColumn(name = "Item_ID"),

@@ -1,10 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout/admin}">
+>
+
+<body data-layout-mode="default" data-theme="light" data-layout-width="fluid" data-topbar-color="dark"
+      data-menu-position="fixed" data-leftbar-color="light" data-leftbar-size='default' data-sidebar-user='false'>
+<section layout:fragment="content">
+
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">UBold</a></li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Ecommerce</a></li>
+                        <li class="breadcrumb-item active">Products</li>
+                        <li class="breadcrumb-item active">Edit</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Edit</h4>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- end page title -->
+</section>

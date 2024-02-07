@@ -116,6 +116,28 @@ public class ItemManagerImpl implements ItemManager{
         item.setItemType(itemType);
         seller.getItems().add(item);
         itemType.getItems().add(item);
+        if(itemDTO.getCategoryIDs() != null){
+            Set<Long> categoryIDs = itemDTO.getCategoryIDs();
+            Set<Category> categories = new HashSet<>();
+            for(Long id : categoryIDs){
+                Category category = categoryRepository.findByCategoryID(id);
+                categories.add(category);
+            }
+            item.setCategories(categories);
+        }
+        Set<Long> mediaIDSet = itemDTO.getMediaIDs();
+        if(mediaIDSet != null && !mediaIDSet.isEmpty()){
+            Set<Media> mediaSet = new HashSet<>();
+            for(Long ID : mediaIDSet) {
+                Media media = mediaRepository.findByMediaID(ID);
+                List<Item> items = new ArrayList<>();
+                items.add(item);
+                media.setItems(items);
+                mediaSet.add(media);
+                mediaRepository.save(media);
+            }
+            item.setMedias(mediaSet);
+        }
         itemRepository.save(item);
         itemTypeRepository.save(itemType);
         sellerRepository.save(seller);

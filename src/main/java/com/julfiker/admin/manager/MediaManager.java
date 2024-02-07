@@ -15,4 +15,6 @@ public interface MediaManager {
     void deleteMediaByID(Long ID);
     MediaDTO convertToDTO(Media media);
 
+    Long getMediaID(String msg);
+
 }

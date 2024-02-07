@@ -28,7 +28,8 @@
     <form method="post"
           role="form"
           th:action="@{/items/save}"
-          th:object="${item}">
+          th:object="${item}"
+          enctype="multipart/form-data">
         <div class="row">
             <div class="col-lg-6">
                 <div class="card">
@@ -60,7 +61,7 @@
                            th:if="${#fields.hasErrors('description')}"></p>
 
                         <div class="form-group mb-3">
-                            <label for="stock_quantity" class="form-label">Item Name <span
+                            <label for="stock_quantity" class="form-label">Stock Quantity <span
                                     class="text-danger">*</span></label>
                             <input type="number"
                                    id="stock_quantity"
@@ -73,27 +74,23 @@
                            th:if="${#fields.hasErrors('stock_quantity')}"></p>
 
                         <div class="form-group mb-3">
-                            <label for="sellerID" class="form-label">Item Name <span
-                                    class="text-danger">*</span></label>
-                            <input type="number"
-                                   id="sellerID"
-                                   class="form-control"
-                                   placeholder="Enter stock quantity"
-                                   th:field = "*{sellerID}"
-                            >
+                            <label for="sellerID" class="form-label">Seller <span class="text-danger">*</span></label>
+                            <select class="form-control select2" id="sellerID" name="sellerID">
+                                <option>Select</option>
+                                <!-- Loop through categories and populate options -->
+                                <option th:each="seller : ${sellers}" th:value="${seller.SellerID}" th:text="${seller.name}"></option>
+                            </select>
                         </div>
                         <p th:errors = "*{sellerID}" class="text-danger"
                            th:if="${#fields.hasErrors('sellerID')}"></p>
 
                         <div class="form-group mb-3">
-                            <label for="itemTypeID" class="form-label">Item Name <span
-                                    class="text-danger">*</span></label>
-                            <input type="number"
-                                   id="itemTypeID"
-                                   class="form-control"
-                                   placeholder="Enter stock quantity"
-                                   th:field = "*{itemTypeID}"
-                            >
+                            <label for="itemTypeID" class="form-label">Item Type <span class="text-danger">*</span></label>
+                            <select class="form-control select2" id="itemTypeID" name="itemTypeID">
+                                <option>Select</option>
+                                <!-- Loop through categories and populate options -->
+                                <option th:each="itemType : ${itemTypes}" th:value="${itemType.itemTypeID}" th:text="${itemType.name}"></option>
+                            </select>
                         </div>
                         <p th:errors = "*{itemTypeID}" class="text-danger"
                            th:if="${#fields.hasErrors('itemTypeID')}"></p>
@@ -101,12 +98,14 @@
 
                         <div class="form-group mb-3">
                             <label for="categoryIDs" class="form-label">Categories <span class="text-danger">*</span></label>
-                            <select class="form-control select2" id="categoryIDs" multiple="multiple">
+                            <select class="form-control select2" id="categoryIDs" multiple="multiple" name="categoryIDs">
                                 <option>Select</option>
                                 <!-- Loop through categories and populate options -->
                                 <option th:each="category : ${categories}" th:value="${category.categoryID}" th:text="${category.name}"></option>
                             </select>
                         </div>
+                        <p th:errors = "*{categoryIDs}" class="text-danger"
+                           th:if="${#fields.hasErrors('categoryIDs')}"></p>
 
 
                         <div class="form-group mb-3">
@@ -153,55 +152,70 @@
             </div> <!-- end col -->
 
             <div class="col-lg-6">
-
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="text-uppercase mt-0 mb-3 bg-light p-2">Product Images</h5>
+                        <h5 class="text-uppercase mt-0 mb-3 bg-light p-2">Item Images</h5>
 
-                        <form action="/" method="post" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone"
-                              data-previews-container="#file-previews"
-                              data-upload-preview-template="#uploadPreviewTemplate">
-                            <div class="fallback">
-                                <input name="file" type="file" multiple/>
-                            </div>
-
-                            <div class="dz-message needsclick">
-                                <i class="h1 text-muted dripicons-cloud-upload"></i>
-                                <h3>Drop files here or click to upload.</h3>
-                                <span class="text-muted font-13">(This is just a demo dropzone. Selected files are
-                                                    <strong>not</strong> actually uploaded.)</span>
-                            </div>
-                        </form>
-
-                        <!-- Preview -->
-                        <div class="dropzone-previews mt-3" id="file-previews"></div>
-                    </div>
-                </div> <!-- end col-->
-
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="text-uppercase mt-0 mb-3 bg-light p-2">Meta Data</h5>
-
-                        <div class="mb-3">
-                            <label for="product-meta-title" class="form-label">Meta title</label>
-                            <input type="text" class="form-control" id="product-meta-title" placeholder="Enter title">
+                        <!-- File upload section -->
+                        <div class="form-group mb-3">
+                            <label for="file" class="form-label">Upload Images</label>
+                            <input type="file" id="file" name="file" multiple class="form-control-file">
                         </div>
 
-                        <div class="mb-3">
-                            <label for="product-meta-keywords" class="form-label">Meta Keywords</label>
-                            <input type="text" class="form-control" id="product-meta-keywords"
-                                   placeholder="Enter keywords">
-                        </div>
-
-                        <div>
-                            <label for="product-meta-description" class="form-label">Meta Description </label>
-                            <textarea class="form-control" rows="5" id="product-meta-description"
-                                      placeholder="Please enter description"></textarea>
-                        </div>
                     </div>
                 </div> <!-- end card -->
+            </div>
 
-            </div> <!-- end col-->
+<!--            <div class="col-lg-6">-->
+
+<!--                <div class="card">-->
+<!--                    <div class="card-body">-->
+<!--                        <h5 class="text-uppercase mt-0 mb-3 bg-light p-2">Product Images</h5>-->
+
+<!--                        <form action="/" method="post" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone"-->
+<!--                              data-previews-container="#file-previews"-->
+<!--                              data-upload-preview-template="#uploadPreviewTemplate">-->
+<!--                            <div class="fallback">-->
+<!--                                <input name="file" type="file" multiple/>-->
+<!--                            </div>-->
+
+<!--                            <div class="dz-message needsclick">-->
+<!--                                <i class="h1 text-muted dripicons-cloud-upload"></i>-->
+<!--                                <h3>Drop files here or click to upload.</h3>-->
+<!--                                <span class="text-muted font-13">(This is just a demo dropzone. Selected files are-->
+<!--                                                    <strong>not</strong> actually uploaded.)</span>-->
+<!--                            </div>-->
+<!--                        </form>-->
+
+<!--                        &lt;!&ndash; Preview &ndash;&gt;-->
+<!--                        <div class="dropzone-previews mt-3" id="file-previews"></div>-->
+<!--                    </div>-->
+<!--                </div> &lt;!&ndash; end col&ndash;&gt;-->
+
+<!--                <div class="card">-->
+<!--                    <div class="card-body">-->
+<!--                        <h5 class="text-uppercase mt-0 mb-3 bg-light p-2">Meta Data</h5>-->
+
+<!--                        <div class="mb-3">-->
+<!--                            <label for="product-meta-title" class="form-label">Meta title</label>-->
+<!--                            <input type="text" class="form-control" id="product-meta-title" placeholder="Enter title">-->
+<!--                        </div>-->
+
+<!--                        <div class="mb-3">-->
+<!--                            <label for="product-meta-keywords" class="form-label">Meta Keywords</label>-->
+<!--                            <input type="text" class="form-control" id="product-meta-keywords"-->
+<!--                                   placeholder="Enter keywords">-->
+<!--                        </div>-->
+
+<!--                        <div>-->
+<!--                            <label for="product-meta-description" class="form-label">Meta Description </label>-->
+<!--                            <textarea class="form-control" rows="5" id="product-meta-description"-->
+<!--                                      placeholder="Please enter description"></textarea>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div> &lt;!&ndash; end card &ndash;&gt;-->
+
+<!--            </div> &lt;!&ndash; end col&ndash;&gt;-->
         </div>
         <!-- end row -->
 
@@ -217,28 +231,28 @@
         <!-- end row -->
 
 
-        <!-- file preview template -->
-        <div class="d-none" id="uploadPreviewTemplate">
-            <div class="card mt-1 mb-0 shadow-none border">
-                <div class="p-2">
-                    <div class="row align-items-center">
-                        <div class="col-auto">
-                            <img data-dz-thumbnail src="#" class="avatar-sm rounded bg-light" alt="">
-                        </div>
-                        <div class="col ps-0">
-                            <a href="javascript:void(0);" class="text-muted fw-bold" data-dz-name></a>
-                            <p class="mb-0" data-dz-size></p>
-                        </div>
-                        <div class="col-auto">
-                            <!-- Button -->
-                            <a href="" class="btn btn-link btn-lg text-muted" data-dz-remove>
-                                <i class="dripicons-cross"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!--        &lt;!&ndash; file preview template &ndash;&gt;-->
+<!--        <div class="d-none" id="uploadPreviewTemplate">-->
+<!--            <div class="card mt-1 mb-0 shadow-none border">-->
+<!--                <div class="p-2">-->
+<!--                    <div class="row align-items-center">-->
+<!--                        <div class="col-auto">-->
+<!--                            <img data-dz-thumbnail src="#" class="avatar-sm rounded bg-light" alt="">-->
+<!--                        </div>-->
+<!--                        <div class="col ps-0">-->
+<!--                            <a href="javascript:void(0);" class="text-muted fw-bold" data-dz-name></a>-->
+<!--                            <p class="mb-0" data-dz-size></p>-->
+<!--                        </div>-->
+<!--                        <div class="col-auto">-->
+<!--                            &lt;!&ndash; Button &ndash;&gt;-->
+<!--                            <a href="" class="btn btn-link btn-lg text-muted" data-dz-remove>-->
+<!--                                <i class="dripicons-cross"></i>-->
+<!--                            </a>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
     </form>
 </section>
 </body>
