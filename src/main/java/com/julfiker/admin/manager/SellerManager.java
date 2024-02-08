@@ -21,4 +21,6 @@ public interface SellerManager {
     void setSellerRating(Long ID, BigDecimal rating);
 
     void addAssociationWithPaymentMethod(Long sellerID, Long pmID);
+
+    SellerDTO convertToDTO(Seller seller);
 }

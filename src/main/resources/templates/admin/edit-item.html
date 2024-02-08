@@ -108,6 +108,20 @@
                         </div>
                         <p th:errors = "*{itemTypeID}" class="text-danger"
                            th:if="${#fields.hasErrors('itemTypeID')}"></p>
+                        <div class="form-group mb-3">
+                            <label for="attributeIDs" class="form-label">attributes <span class="text-danger">*</span></label>
+                            <select class="form-control select2" id="attributeIDs" multiple="multiple" name="attributeIDs">
+                                <option>Select</option>
+                                <!-- Loop through categories and populate options -->
+                                <option th:each="attribute : ${attributes}"
+                                        th:value="${attribute.AttributeID}"
+                                        th:text="${attribute.name}"
+                                        th:selected="${item.attributeIDs.contains(attribute.AttributeID)}"></option>
+                            </select>
+                        </div>
+                        <p th:errors = "*{AttributeIDs}" class="text-danger"
+                           th:if="${#fields.hasErrors('AttributeIDs')}"></p>
+
 
                         <div class="form-group mb-3">
                             <label for="categoryIDs" class="form-label">Categories <span class="text-danger">*</span></label>

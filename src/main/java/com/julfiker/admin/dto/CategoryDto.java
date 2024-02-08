@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.Future;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,4 +22,5 @@ public class CategoryDto {
     private LocalDateTime perishable;
     private LocalDateTime creation_date;
     private LocalDateTime last_updated;
+    private List<Long> itemIDs;
 }

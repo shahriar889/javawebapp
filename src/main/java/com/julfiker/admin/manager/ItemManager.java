@@ -1,9 +1,6 @@
 package com.julfiker.admin.manager;
 
-import com.julfiker.admin.dto.AttributeDTO;
-import com.julfiker.admin.dto.CategoryDto;
-import com.julfiker.admin.dto.ItemDTO;
-import com.julfiker.admin.dto.MediaDTO;
+import com.julfiker.admin.dto.*;
 import com.julfiker.admin.entity.Category;
 
 import java.math.BigDecimal;
@@ -31,4 +28,7 @@ public interface ItemManager {
 
     void addMediaToItem(Long ID, Long ID2);
     void addCategoryToItem(Long ID, Long ID2);
+
+    SellerDTO getSeller(Long ID);
+    void setItemRating(Long ID, BigDecimal rating);
 }

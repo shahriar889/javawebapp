@@ -26,6 +26,13 @@ public class CategoryManagerImpl implements CategoryManager{
         categoryDto.setName(category.getName());
         categoryDto.setDescription(category.getDescription());
         Category parentCategory = category.getParentCategory();
+        List<Item> items = category.getItems();
+        if(items != null) {
+            List<Long> itemIDs = new ArrayList<>();
+            for (Item item : items)
+                itemIDs.add(item.getItemID());
+            categoryDto.setItemIDs(itemIDs);
+        }
         if (parentCategory != null) {
             categoryDto.setParentID(parentCategory.getCategoryID());
         }

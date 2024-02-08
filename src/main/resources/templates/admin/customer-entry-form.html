@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout/admin}">
+>
+
+<body data-layout-mode="default" data-theme="light" data-layout-width="fluid" data-topbar-color="dark"
+      data-menu-position="fixed" data-leftbar-color="light" data-leftbar-size='default' data-sidebar-user='false'>
+<section layout:fragment="content">
+
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">UBold</a></li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Ecommerce</a></li>
+                        <li class="breadcrumb-item active"><a href="">Customers</a></li>
+                        <li class="breadcrumb-item active">Add Customer</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Add Customer</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+
+    <form method="post"
+          role="form"
+          th:action="@{/customers/save}"
+          th:object="${wrapper}"
+          enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">General</h5>
+                        <div class="form-group mb-3">
+                            <label for="customer-name" class="form-label">Customer Name <span class="text-danger">*</span></label>
+                            <input type="text"
+                                   id="customer-name"
+                                   class="form-control"
+                                   placeholder="Enter Customer Name"
+                                   th:field="*{customerDTO.name}">
+                        </div>
+                        <p th:errors="*{customerDTO.name}" class="text-danger"
+                           th:if="${#fields.hasErrors('customerDTO.name')}"></p>
+                        <div class="form-group mb-3">
+                            <label for="description" class="form-label">Customer Description <span
+                                    class="text-danger">*</span></label>
+                            <textarea class="form-control" id="description" rows="3"
+                                      placeholder="Please enter Customer Description"
+                                      th:field = "*{wrapper.customerDTO.name}"
+                            ></textarea>
+                        </div>
+                        <p th:errors = "*{description}" class="text-danger"
+                           th:if="${#fields.hasErrors('description')}"></p>
+
+                        <div class="form-group mb-3">
+                            <label for="address" class="form-label">Customer Address <span
+                                    class="text-danger">*</span></label>
+                            <textarea class="form-control" id="address" rows="3"
+                                      placeholder="Please enter Customer Address"
+                                      th:field = "*{wrapper.customerDTO.address}"
+                            ></textarea>
+                        </div>
+                        <p th:errors = "*{address}" class="text-danger"
+                           th:if="${#fields.hasErrors('address')}"></p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>
+</body>

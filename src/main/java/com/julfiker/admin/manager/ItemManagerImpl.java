@@ -1,9 +1,6 @@
 package com.julfiker.admin.manager;
 
-import com.julfiker.admin.dto.AttributeDTO;
-import com.julfiker.admin.dto.CategoryDto;
-import com.julfiker.admin.dto.ItemDTO;
-import com.julfiker.admin.dto.MediaDTO;
+import com.julfiker.admin.dto.*;
 import com.julfiker.admin.entity.*;
 import com.julfiker.admin.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +36,8 @@ public class ItemManagerImpl implements ItemManager{
     AttributeRepository attributeRepository;
     @Autowired
     MediaRepository mediaRepository;
+    @Autowired
+    SellerManager sellerManager;
 
     private final Long defaultNumRating = 0L;
     private final BigDecimal defaultRating = BigDecimal.valueOf(0.0);
@@ -120,6 +119,15 @@ public class ItemManagerImpl implements ItemManager{
         item.setItemType(itemType);
         seller.getItems().add(item);
         itemType.getItems().add(item);
+        if(itemDTO.getAttributeIDs() != null){
+            Set<Long> attrIDs = itemDTO.getCategoryIDs();
+            Set<Attribute> attributes = new HashSet<>();
+            for(Long id : attrIDs){
+                Attribute attribute = attributeRepository.findByAttributeID(id);
+                attributes.add(attribute);
+            }
+            item.setAttributes(attributes);
+        }
         if(itemDTO.getCategoryIDs() != null){
             Set<Long> categoryIDs = itemDTO.getCategoryIDs();
             Set<Category> categories = new HashSet<>();
@@ -306,5 +314,30 @@ public class ItemManagerImpl implements ItemManager{
         itemRepository.save(item);
         mediaRepository.save(media);
 
+    }
+
+    @Override
+    public SellerDTO getSeller(Long ID){
+        Item item = itemRepository.findByItemID(ID);
+        Seller seller = item.getSeller();
+        return sellerManager.convertToDTO(seller);
+    }
+
+    @Override
+    public void setItemRating(Long ID, BigDecimal rating){
+        Item item = itemRepository.findByItemID(ID);
+        if(item == null){
+            System.out.println("No Item found associated with this ID");
+            return;
+        }
+        Long curNumRatings = item.getNum_ratings();
+        BigDecimal curTotalRating = item.getRating().multiply(BigDecimal.valueOf(curNumRatings));
+        BigDecimal newTotalRating = curTotalRating.add(rating);
+        BigDecimal newNumRatings = BigDecimal.valueOf(curNumRatings + 1);
+        BigDecimal newRating = newTotalRating.divide(newNumRatings, RoundingMode.HALF_UP);
+        item.setRating(newRating);
+        item.setNum_ratings(curNumRatings+1L);;
+        item.setLast_updated(LocalDateTime.now());
+        itemRepository.save(item);
     }
 }

@@ -21,8 +21,10 @@ import javax.validation.Valid;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 public class ProductController {
@@ -40,18 +42,22 @@ public class ProductController {
     ItemManager itemManager;
     @Autowired
     MediaManager mediaManager;
+    @Autowired
+    AttributeManager attributeManager;
 
     @GetMapping("items/new")
     public String showItemEntryForm(Model model) {
         List<CategoryDto> categories = categoryManager.findAllCategories();
         List<ItemTypeDTO> itemTypeDTOS = itemTypeManager.findAllItemType();
         List<SellerDTO> sellerDTOS = sellerManager.findAll();
+        List<AttributeDTO> attributeDTOS = attributeManager.findAllAttributes();
         ItemDTO item = new ItemDTO();
 
         model.addAttribute("sellers", sellerDTOS);
         model.addAttribute("itemTypes", itemTypeDTOS);
         model.addAttribute("item", item);
         model.addAttribute("categories", categories);
+        model.addAttribute("attributes", attributeDTOS);
         return "admin/item-entry-form";
     }
 
@@ -96,7 +102,7 @@ public class ProductController {
                     MediaDTO mediaDTO = new MediaDTO();
                     File destFile = new File(destDir.getAbsolutePath() + File.separator + fileName);
                     file.transferTo(destFile);
-                    mediaDTO.setFileOriginalPath("assets/images/"+fileName);
+                    mediaDTO.setFileOriginalPath("assets/images/" + fileName);
                     mediaDTO.setFileSize((double) file.getSize());
                     int lastIndex = originalFilename.lastIndexOf('.');
                     if (lastIndex >= 0 && lastIndex < originalFilename.length() - 1) {
@@ -120,10 +126,10 @@ public class ProductController {
                     String thumbnailFileName = "thumbnail_" + fileName;
                     File thumbnailFile = new File(destDir.getAbsolutePath() + File.separator + thumbnailFileName);
                     ImageIO.write(thumbnail, "jpg", thumbnailFile);
-                    mediaDTO.setFileThumbnailPath("assets/images/"+thumbnailFileName);
+                    mediaDTO.setFileThumbnailPath("assets/images/" + thumbnailFileName);
                     mediaManager.saveMedia(mediaDTO);
                     savedMediaID = mediaManager.getMediaID(mediaDTO.getFileOriginalPath());
-                    System.out.println("Controller "+savedMediaID);
+                    System.out.println("Controller " + savedMediaID);
 
 
                     // Optionally, you can save the file paths to the database or do other processing
@@ -149,9 +155,9 @@ public class ProductController {
             System.out.println("id" + id);
         System.out.println(itemDTO.getPrice());
         Set<Long> mediaIDs = itemDTO.getMediaIDs();
-        if(mediaIDs == null)
+        if (mediaIDs == null)
             mediaIDs = new HashSet<>();
-        if(savedMediaID != 0)
+        if (savedMediaID != 0)
             mediaIDs.add(savedMediaID);
         itemDTO.setMediaIDs(mediaIDs);
         itemManager.saveItem(itemDTO);
@@ -159,8 +165,27 @@ public class ProductController {
     }
 
     @GetMapping("/items")
-    public String showAllItems(Model model){
+    public String showAllItems(Model model, @RequestParam(required = false) String sortBy, @RequestParam(required = false) String searchName) {
         List<ItemDTO> itemDTOS = itemManager.findAll();
+
+        // Filter items by name if searchName is provided
+        if (searchName != null && !searchName.isEmpty()) {
+            System.out.println("Search");
+            itemDTOS = itemDTOS.stream()
+                    .filter(item -> item.getName().toLowerCase().contains(searchName.toLowerCase()))
+                    .collect(Collectors.toList());
+        }
+
+        // Sort the list of items based on the sortBy parameter
+        if ("priceLow".equals(sortBy)) {
+            itemDTOS.sort(Comparator.comparing(ItemDTO::getPrice));
+        } else if ("priceHigh".equals(sortBy)) {
+            itemDTOS.sort(Comparator.comparing(ItemDTO::getPrice).reversed());
+        } else if ("ratingHigh".equals(sortBy)) {
+            itemDTOS.sort(Comparator.comparing(ItemDTO::getRating).reversed());
+        } else if ("stockLow".equals(sortBy)) {
+            itemDTOS.sort(Comparator.comparing(ItemDTO::getStock_quantity));
+        }
 
         List<MediaDTO> mediaDTOS = mediaManager.findAllMedia();
         model.addAttribute("items", itemDTOS);
@@ -168,8 +193,9 @@ public class ProductController {
         return "admin/item-list";
     }
 
+
     @GetMapping("items/edit/{ID}")
-    public String editItem(@PathVariable Long ID, Model model){
+    public String editItem(@PathVariable Long ID, Model model) {
 
         List<CategoryDto> categories = categoryManager.findAllCategories();
         List<ItemTypeDTO> itemTypeDTOS = itemTypeManager.findAllItemType();
@@ -179,30 +205,40 @@ public class ProductController {
         model.addAttribute("itemTypes", itemTypeDTOS);
         model.addAttribute("categories", categories);
         ItemDTO itemDTO = itemManager.findItemByID(ID);
-        model.addAttribute("item",itemDTO);
+        model.addAttribute("item", itemDTO);
+        List<AttributeDTO> attributeDTOS = attributeManager.findAllAttributes();
+        model.addAttribute("attributes", attributeDTOS);
         return "admin/edit-item";
     }
 
 
-    @DeleteMapping("/items/{ID}/delete")
+    @DeleteMapping("/items/{ID}")
+    @Transactional
     public String deleteItemByID(@PathVariable Long ID) {
         itemManager.deleteItem(ID);
         return "redirect:/items";
     }
 
     @GetMapping("items/{ID}/details")
-    public String itemDetails(@PathVariable Long ID, Model model){
+    public String itemDetails(@PathVariable Long ID, Model model) {
         System.out.println("in details");
         ItemDTO itemDTO = itemManager.findItemByID(ID);
         Set<MediaDTO> mediaDTOS = itemManager.getAllItemMedias(ID);
-        List<ItemDTO> itemDTOS = itemManager.findAll();
-        List<MediaDTO> mediaDTOList = mediaManager.findAllMedia();
-        model.addAttribute("item",itemDTO);
-//        model.addAttribute("media", mediaDTOS);
-        model.addAttribute("items", itemDTOS);
-        model.addAttribute("media", mediaDTOList);
+        SellerDTO sellerDTO = itemManager.getSeller(ID);
+        Set<CategoryDto> categoryDTOs = itemManager.getAllItemCategories(ID);
+        List<ItemTypeDTO> itemTypeDTOS = itemTypeManager.findAllItemType();
+        model.addAttribute("item", itemDTO);
+        model.addAttribute("medias", mediaDTOS);
+        model.addAttribute("seller", sellerDTO);
+        model.addAttribute("categories", categoryDTOs);
+        model.addAttribute("itemTypes", itemTypeDTOS);
         System.out.println(mediaDTOS.size());
         return "admin/item-details";
+    }
+    @GetMapping("/items/{ID}/rating/{num}")
+    public String addRatings(@PathVariable Long ID, @PathVariable BigDecimal num){
+        itemManager.setItemRating(ID, num);
+        return "redirect:/items";
     }
 
 }

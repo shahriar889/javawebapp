@@ -28,7 +28,6 @@ public class ItemDTO {
     private Long itemTypeID;
     private Set<Long> categoryIDs;
     private Set<Long> mediaIDs;
-    private Long displayMediaID;
     private Set<Long> attributeIDs;
     private List<Long> cartItemIDs;
     private List<Long> orderItemIDs;
