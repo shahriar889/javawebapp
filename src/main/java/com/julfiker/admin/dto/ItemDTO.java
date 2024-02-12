@@ -33,5 +33,6 @@ public class ItemDTO {
     private List<Long> orderItemIDs;
     private LocalDateTime creation_date;
     private LocalDateTime last_updated;
+    private List<Long> itemDetailsIDs;
 
 }

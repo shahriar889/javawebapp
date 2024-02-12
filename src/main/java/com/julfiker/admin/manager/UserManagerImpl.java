@@ -55,13 +55,25 @@ public class UserManagerImpl implements UserManager {
 
     @Override
     public Long saveUserWithRole(UserDto userDto, RoleDTO roleDTO){
-        User user = new User();
+        User user = userRepository.findByUserID(userDto.getUserID());
+        if(user == null)
+            user = new User();
+        else {
+            user.setLast_updated(LocalDateTime.now());
+            String pass = user.getPassword();
+            String pass2 = passwordEncoder.encode(userDto.getPassword());
+            System.out.println(pass);
+            System.out.println(pass2);
+            if(!pass.equals(pass2)){
+                return null;
+            }
+        }
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
         // encrypt the password using spring security
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setCreation_date(LocalDateTime.now());
-        user.setStatus(true);
+        user.setStatus(userDto.getStatus());
         user.setPhone(userDto.getPhone());
         Role role = roleRepository.findByName(roleDTO.getName());
         if(role == null) {
@@ -119,6 +131,7 @@ public class UserManagerImpl implements UserManager {
         Set<Long> roleIDSet = new HashSet<>();
         for(Role role:roles)
             roleIDSet.add(role.getRoleID());
+        userDto.setStatus(user.getStatus());
         userDto.setRoleIDSet(roleIDSet);
         return userDto;
     }

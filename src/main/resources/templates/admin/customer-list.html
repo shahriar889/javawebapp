@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout/admin}">
+
+<body data-layout-mode="default" data-theme="light" data-layout-width="fluid" data-topbar-color="dark"
+      data-menu-position="fixed" data-leftbar-color="light" data-leftbar-size='default' data-sidebar-user='false'>
+<section layout:fragment="content">
+
+
+    <!-- Start Content-->
+    <div class="container-fluid">
+
+        <!-- start page title -->
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">UBold</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Ecommerce</a></li>
+                            <li class="breadcrumb-item active">Customers</li>
+                        </ol>
+                    </div>
+                    <h4 class="page-title">Customers</h4>
+                </div>
+            </div>
+        </div>
+        <!-- end page title -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row mb-2">
+                            <div class="col-sm-4">
+                                <a href="customers/new" class="btn btn-danger mb-2"><i
+                                        class="mdi mdi-plus-circle me-2"></i> Add Customers</a>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-centered table-striped dt-responsive nowrap w-100"
+                                   id="products-datatable">
+                                <thead>
+                                <tr>
+                                    <th style="width: 20px;">
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="customCheck1">
+                                            <label class="form-check-label" for="customCheck1">&nbsp;</label>
+                                        </div>
+                                    </th>
+                                    <th>Customer</th>
+                                    <th>Phone</th>
+                                    <th>Email</th>
+                                    <th>Orders</th>
+                                    <th>Last Order</th>
+                                    <th>Status</th>
+                                    <th style="width: 75px;">Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="customer :${customers}">
+                                    <td>
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="customCheck2">
+                                            <label class="form-check-label" for="customCheck2">ABC</label>
+                                        </div>
+                                    </td>
+                                    <td class="table-user">
+                                        <img th:each="mediaItem :${medias}"
+                                             th:if="${mediaItem.customerID == customer.customerID}"
+                                             th:src="@{${mediaItem.fileThumbnailPath}}" alt="table-user"
+                                             class="me-2 rounded-circle">
+                                        <a href="javascript:void(0);" class="text-body fw-semibold"
+                                           th:text=${customer.name}></a>
+                                    </td>
+                                    <td th:each="user:${users}" th:if="${user.userID == customer.userID}"
+                                        th:text="${user.phone}"></td>
+                                    <td th:each="user:${users}" th:if="${user.userID == customer.userID}"
+                                        th:text="${user.email}"></td>
+                                    <td><span th:if="${customer.numOrders != null}"
+                                              th:text="${customer.numOrders}"></span>
+                                        <span th:if="${customer.numOrders == null}">0</span></td>
+                                    <td><span th:if="${customer.lastOrderDate != null}"
+                                              th:text="${customer.numOrders}"></span>
+                                        <span th:if="${customer.lastOrderDate == null}">0</span></td>
+                                    <td th:each="user:${users}" th:if="${user.userID == customer.userID}">
+                                        <span th:if="${user.status == true}" class="badge badge-soft-success" th:text="Active"></span>
+                                        <span th:if="${user.status == false}" class="badge badge-soft-danger" th:text="Blocked"></span>
+                                    </td>
+                                    <td>
+                                        <a th:href="@{'customers/' + ${customer.customerID} +'/edit'}" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
+                                        <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-delete"></i></a>
+                                    </td>
+
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>

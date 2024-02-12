@@ -9,7 +9,7 @@ public interface CartManager {
 
     CartDTO convertToDTO(Cart cart);
     void addItemToCart(Long customerID, Long itemID, Integer quantity);
-    void deleteItemFromCart(Long customerID, Long itemID);
+    void deleteItemFromCart(Long customerID, Long cartItemID);
 
     CartDTO findCartByCustomer(Long customerID);
     CartDTO findCartByID(Long ID);

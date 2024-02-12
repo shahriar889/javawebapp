@@ -47,6 +47,10 @@ public class CustomerManagerImpl implements CustomerManager{
             customerDTO.setOrderID(customer.getOrder().getOrderID());
         if(customer.getMedia() != null)
             customerDTO.setMediaID(customer.getMedia().getMediaID());
+        if(customer.getLastOrderDate() != null)
+            customerDTO.setLastOrderDate(customer.getLastOrderDate());
+        if(customer.getNumOrders() != null)
+            customerDTO.setNumOrders(customer.getNumOrders());
         List<PaymentInfo> paymentInfos = customer.getPaymentInfos();
         List<Long> pI_IDs = new ArrayList<>();
         for(PaymentInfo paymentInfo : paymentInfos)
@@ -70,22 +74,44 @@ public class CustomerManagerImpl implements CustomerManager{
     }
 
     @Override
+    @Transactional
     public void saveCustomer(CustomerDTO customerDTO, UserDto userDto){
         if(customerDTO.getName() == null || customerDTO.getDescription() == null ||
         customerDTO.getAddress() == null){
             System.out.println("Do not have enough info to create customer.");
             return;
         }
-        Customer customer = new Customer();
+        Customer customer = customerRepository.findByCustomerID(customerDTO.getCustomerID());
+        RoleDTO roleDTO = new RoleDTO();
+        roleDTO.setName("Customer");
+        Long userID = userManager.saveUserWithRole(userDto, roleDTO);
+        if(userID == null){
+            System.out.println("Please enter correct password to update");
+            return;
+        }
+        if(customer == null) {
+            customer = new Customer();
+            List<PaymentInfo> paymentInfos = new ArrayList<>();
+            customer.setPaymentInfos(paymentInfos);
+        }
+        else
+            customer.setLast_updated(LocalDateTime.now());
         customer.setName(customerDTO.getName());
         customer.setAddress(customerDTO.getAddress());
         customer.setDescription(customerDTO.getDescription());
         customer.setCreation_date(LocalDateTime.now());
-        List<PaymentInfo> paymentInfos = new ArrayList<>();
-        customer.setPaymentInfos(paymentInfos);
-        RoleDTO roleDTO = new RoleDTO();
-        roleDTO.setName("Customer");
-        Long userID = userManager.saveUserWithRole(userDto, roleDTO);
+        if(customerDTO.getMediaID() != null && customerDTO.getMediaID() != 0){
+            Media media = mediaRepository.findByMediaID(customerDTO.getMediaID());
+            if(customer.getMedia() != null){
+                Media media1 = customer.getMedia();
+                Long mediaID = media1.getMediaID();
+                customer.setMedia(null);
+                mediaRepository.deleteByMediaID(mediaID);
+            }
+            customer.setMedia(media);
+            media.setCustomer(customer);
+            mediaRepository.save(media);
+        }
         User user = userRepository.findByUserID(userID);
         customer.setUser(user);
         customerRepository.save(customer);

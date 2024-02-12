@@ -24,5 +24,5 @@ public class UserDto
     private LocalDateTime creation_Date;
     private LocalDateTime last_updated;
     private String phone;
-    private boolean status;
+    private Boolean status;
 }

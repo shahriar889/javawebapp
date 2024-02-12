@@ -81,6 +81,11 @@ public class ItemManagerImpl implements ItemManager{
         List<Long> orderItemIDs = new ArrayList<>();
         for(OrderItem orderItem : orderItems)
             orderItemIDs.add(orderItem.getOrderItemID());
+        List<ItemDetails> details = item.getItemDetails();
+        List<Long> detailsIDs = new ArrayList<>();
+        for(ItemDetails detail : details)
+            detailsIDs.add(detail.getItemDetailsID());
+        itemDTO.setItemDetailsIDs(detailsIDs);
         itemDTO.setOrderItemIDs(orderItemIDs);
         return itemDTO;
     }

@@ -40,7 +40,7 @@
                         <input type="hidden"
                                id="id"
                                class="form-control"
-                               placeholder="Enter Item Name"
+                               placeholder="Enter Item ID"
                                th:field = "*{itemID}"
                         >
 
@@ -89,7 +89,7 @@
                                 <option th:each="seller : ${sellers}"
                                         th:value="${seller.SellerID}"
                                         th:text="${seller.name}"
-                                        th:selected="${seller.SellerID eq item.sellerID}">></option>
+                                        th:selected="${seller.SellerID eq item.sellerID}"></option>
                             </select>
                         </div>
                         <p th:errors = "*{sellerID}" class="text-danger"

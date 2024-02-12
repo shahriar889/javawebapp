@@ -54,7 +54,7 @@ public class User
     private String phone;
 
     @Column(nullable = false)
-    private boolean status;
+    private Boolean status;
 
     @Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime creation_date = LocalDateTime.now();

@@ -68,7 +68,7 @@ public class CustomerController {
 
     @DeleteMapping("/customers/{ID}/payment-infos/{ID2}")
     @Transactional
-    void deleteCustomersPIByID(@PathVariable Long ID, @PathVariable Long ID2){
+    public void deleteCustomersPIByID(@PathVariable Long ID, @PathVariable Long ID2){
         customerManager.deletePIFromCustomer(ID, ID2);
     }
 

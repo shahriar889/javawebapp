@@ -31,6 +31,10 @@ public class Customer {
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
+    @Column
+    private LocalDateTime lastOrderDate;
+    @Column
+    private Long numOrders;
 
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     @JoinColumn(name = "media_id", referencedColumnName = "media_id")

@@ -1,9 +1,9 @@
 package com.julfiker.admin.controller.api.v1;
 
-import com.julfiker.admin.dto.AttributeDTO;
-import com.julfiker.admin.dto.CategoryDto;
-import com.julfiker.admin.dto.ItemDTO;
-import com.julfiker.admin.dto.MediaDTO;
+import com.julfiker.admin.dto.*;
+import com.julfiker.admin.entity.Item;
+import com.julfiker.admin.entity.ItemDetails;
+import com.julfiker.admin.manager.ItemDetailsManager;
 import com.julfiker.admin.manager.ItemManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
@@ -21,6 +21,8 @@ public class ItemController {
 
     @Autowired
     ItemManager itemManager;
+    @Autowired
+    ItemDetailsManager itemDetailsManager;
 
     @PostMapping("/items")
     public void createItem(@RequestBody ItemDTO itemDTO) {
@@ -85,5 +87,43 @@ public class ItemController {
     @PutMapping("/items/{ID}/categories/{ID2}")
     public void setCategoryToItem(@PathVariable Long ID, @PathVariable Long ID2){
         itemManager.addCategoryToItem(ID, ID2);
+    }
+
+    @PostMapping("items/{ID}/item-details")
+    public void saveItemDetailsWIthItem(@PathVariable Long ID, @RequestBody List<ItemDetailsDTO> detailsDTOS){
+        for(ItemDetailsDTO dto : detailsDTOS)
+            dto.setItemID(ID);
+        itemDetailsManager.saveMultipleItemDetails(detailsDTOS);
+    }
+
+    @GetMapping("items/{ID}/item-details")
+    public List<ItemDetailsDTO> getAllItemDetailsByID(@PathVariable Long ID){
+        return itemDetailsManager.findAllByItemID(ID);
+    }
+
+    @PutMapping("items/{ID}/item-details")
+    public void updateItemDetails(@PathVariable Long ID, @RequestBody ItemDetailsDTO detailsDTO){
+        itemDetailsManager.updateItemDetails(ID, detailsDTO);
+    }
+
+    @DeleteMapping("items/{ID}/item-details/{ID2}")
+    @Transactional
+    public void detailSingleItemDetails(@PathVariable Long ID, @PathVariable Long ID2){
+        ItemDetailsDTO detailsDTO = itemDetailsManager.findByID(ID2);
+        if(detailsDTO.getItemID().equals(ID))
+            itemDetailsManager.deleteItemDetails(ID2);
+        else
+            System.out.println("Cannot delete this detail does not belong with this item");
+    }
+
+    @DeleteMapping("items/{ID}/item-details")
+    @Transactional
+    public void detailAllItemDetailsFromItem(@PathVariable Long ID){
+
+        if(itemManager.findItemByID(ID).getItemDetailsIDs().isEmpty()){
+            System.out.println("The item details list is already empty");
+            return;
+        }
+        itemDetailsManager.deleteAllItemsDetailsByItemID(ID);
     }
 }

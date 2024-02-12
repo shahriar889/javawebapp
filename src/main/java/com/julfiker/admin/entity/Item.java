@@ -1,6 +1,7 @@
 package com.julfiker.admin.entity;
 
 
+import antlr.collections.impl.LList;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -93,5 +94,8 @@ public class Item {
 
     @OneToMany(mappedBy = "item", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<OrderItem> orderItems;
+
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ItemDetails> itemDetails;
 
 }
