@@ -68,21 +68,19 @@ public class CartManagerImpl implements CartManager{
             customer.setCart(cart);
             BigDecimal itemPrice = itemRepository.findByItemID(itemID).getPrice();
             BigDecimal priceBeforeVAT = itemPrice.multiply(new BigDecimal(quantity));
-            cart.setTotalPrice(priceBeforeVAT.add(priceBeforeVAT.multiply(new BigDecimal(quantity))));
+            cart.setTotalPrice(priceBeforeVAT);
+
+            cart.setCreation_date(LocalDateTime.now());
             cartRepository.save(cart);
             cart = cartRepository.findCartByCustomer(customer);
             cartItemDTO.setCartID(cart.getCartID());
             cartItemManager.saveCartItem(cartItemDTO);
-            cart.setCreation_date(LocalDateTime.now());
             return;
         }
         BigDecimal totalOldPrice = cart.getTotalPrice();
-        BigDecimal vatPrice = totalOldPrice.divide(new BigDecimal("1.15"), 2, RoundingMode.HALF_UP);
         BigDecimal itemPrice = itemRepository.findByItemID(itemID).getPrice();
         BigDecimal newItemPrice =  itemPrice.multiply(new BigDecimal(quantity));
-        BigDecimal oldPrice = totalOldPrice.subtract(vatPrice);
-        oldPrice = oldPrice.add(newItemPrice);
-        BigDecimal newTotalPrice = oldPrice.add(oldPrice.multiply(new BigDecimal("0.15")));
+        BigDecimal newTotalPrice = totalOldPrice.add(newItemPrice);
         cartItemDTO.setCartID(cart.getCartID());
         cart.setTotalPrice(newTotalPrice);
         cartItemManager.saveCartItem(cartItemDTO);
@@ -125,7 +123,63 @@ public class CartManagerImpl implements CartManager{
             System.out.println("This cart item does not belong with this customer");
             return;
         }
+        Item item = itemRepository.findByItemID(cartItem.getItem().getItemID());
+        BigDecimal oldPrice = cart.getTotalPrice();
+        BigDecimal itemPrice = item.getPrice();
+        BigDecimal subPrice = itemPrice.multiply(new BigDecimal(cartItem.getQuantity()));
+        BigDecimal newPrice = oldPrice.subtract(subPrice);
+        cart.setTotalPrice(newPrice);
+        boolean check = cart.getCartItems().remove(cartItem);
+        if(!check)
+            System.out.println("Remove failed");
+        cartRepository.save(cart);
+        item.getCartItems().remove(cartItem);
+        itemRepository.save(item);
         cartItemRepository.deleteByCartItemID(cartItemID);
+    }
 
+    @Override
+    public void emptyCart(Long customerID) {
+        Cart cart = cartRepository.findCartByCustomer(customerRepository.findByCustomerID(customerID));
+
+        List<CartItem> cartItems = new ArrayList<>(cart.getCartItems());
+
+        for (CartItem cartItem : cartItems) {
+            Item item = cartItem.getItem();
+
+            item.getCartItems().remove(cartItem);
+            itemRepository.save(item);
+
+            cart.getCartItems().remove(cartItem);
+            cartItemRepository.delete(cartItem);
+        }
+
+
+        cart.setTotalPrice(BigDecimal.ZERO);
+        cartRepository.save(cart);
+    }
+
+    @Override
+    @Transactional
+    public void changeItemQuantity(Integer quantity, Long cartItemID) {
+        CartItem cartItem = cartItemRepository.findByCartItemID(cartItemID);
+        if(cartItem == null){
+            System.out.println("No cart item found with the ID");
+            return;
+        }
+        Cart cart = cartItem.getCart();
+        if(quantity == 0){
+            this.deleteItemFromCart(cart.getCustomer().getCustomerID(), cartItemID);
+        }
+        else{
+            Integer oldQuantity = cartItem.getQuantity();
+            BigDecimal oldPrice = cart.getTotalPrice();
+            Item item = itemRepository.findByItemID(cartItem.getItem().getItemID());
+            BigDecimal itemPrice = item.getPrice();
+            BigDecimal subtractedPrice = oldPrice.subtract(itemPrice.multiply(new BigDecimal(oldQuantity)));
+            BigDecimal newPrice = subtractedPrice.add(itemPrice.multiply(new BigDecimal(quantity)));
+            cartItem.setQuantity(quantity);
+            cart.setTotalPrice(newPrice);
+        }
     }
 }

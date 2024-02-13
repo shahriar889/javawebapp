@@ -11,7 +11,11 @@ public interface CartManager {
     void addItemToCart(Long customerID, Long itemID, Integer quantity);
     void deleteItemFromCart(Long customerID, Long cartItemID);
 
+    void emptyCart(Long customerID);
+
     CartDTO findCartByCustomer(Long customerID);
     CartDTO findCartByID(Long ID);
     List<CartDTO> findAll();
+
+    void changeItemQuantity(Integer quantity, Long cartItemID);
 }

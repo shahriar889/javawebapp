@@ -25,7 +25,7 @@ public class Cart {
     @Column(name = "CartID")
     private Long cartID;
 
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @Fetch(FetchMode.SUBSELECT)
     private List<CartItem> cartItems = new ArrayList<>();
 

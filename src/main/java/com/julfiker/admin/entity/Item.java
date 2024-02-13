@@ -88,7 +88,7 @@ public class Item {
     )
     private Set<Media> medias = new HashSet<>();
 
-    @OneToMany (mappedBy = "item", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @OneToMany (mappedBy = "item", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     List<CartItem> cartItems;
 
 

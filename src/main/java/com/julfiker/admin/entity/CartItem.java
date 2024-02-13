@@ -28,7 +28,7 @@ public class CartItem {
     private LocalDateTime last_updated;
 
     @ManyToOne
-    @JoinColumn(name = "cart_id", nullable = false)
+    @JoinColumn(name = "CartID", nullable = false)
     private Cart cart;
 
     @ManyToOne

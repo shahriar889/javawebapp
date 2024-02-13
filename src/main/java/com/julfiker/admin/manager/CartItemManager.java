@@ -10,11 +10,11 @@ public interface CartItemManager {
 
     void saveCartItem(CartItemDTO cartItemDTO);
     void updateCartItem(Long ID, CartItemDTO cartItemDTO);
-    void deleteCartItemByID(Long ID);
-    List<CartItemDTO> findAllCartItems(String name);
+
+    List<CartItemDTO> findAllCartItems();
     CartItemDTO findByCartItemByID(Long ID);
-
-
     CartItemDTO convertToDTO(CartItem cartItem);
+
+    List<CartItemDTO> getAllCartItemsByCart(Long cartID);
 
 }
