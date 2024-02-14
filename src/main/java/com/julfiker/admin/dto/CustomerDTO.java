@@ -25,6 +25,6 @@ public class CustomerDTO {
     private Long userID;
     private Long mediaID;
     private Long cartID;
-    private Long orderID;
+    private List<Long> orderIDs;
     private List<Long> paymentInfoIDs;
 }

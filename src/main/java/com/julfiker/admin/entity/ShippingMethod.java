@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -34,7 +35,7 @@ public class ShippingMethod {
     private Integer estimatedDeliveryTime;
 
     @Column(nullable = false)
-    private boolean isAvailable;
+    private boolean available;
 
     @Column(nullable = false, name = "tracking_url", unique = true)
     private String trackingURL;
@@ -43,18 +44,14 @@ public class ShippingMethod {
     private Integer handlingTime;
 
     @Column(nullable = false)
-    private boolean isInternational;
-
-    @Column(nullable = false)
-    private String courier;
+    private boolean international;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "Delievry_Man_ID")
     DeliveryMan deliveryMan;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "OrderID")
-    Order order;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "shippingMethod")
+    List<Order> orders;
 
     @Column(nullable = false)
     private LocalDateTime creation_date;

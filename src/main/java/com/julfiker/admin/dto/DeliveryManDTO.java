@@ -12,12 +12,17 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderItemDTO {
-    private Long orderItemID;
-    private Long itemID;
-    private Long orderID;
-    private Integer quantity;
+public class DeliveryManDTO {
+    private Long deliveryManID;
+    private String name;
+    private String contactInfo;
+    private boolean isAvailable;
+    private String vehicleType;
+    private String licensePlate;
+    private BigDecimal rating;
+    private Long numRatings;
+    private Long shippingMethodID;
+    private Long userID;
     private LocalDateTime creation_date;
     private LocalDateTime last_updated;
 }
-

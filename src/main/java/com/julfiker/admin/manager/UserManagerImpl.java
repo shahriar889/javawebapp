@@ -38,6 +38,7 @@ public class UserManagerImpl implements UserManager {
         user.setEmail(userDto.getEmail());
         user.setCreation_date(LocalDateTime.now());
         user.setPhone(userDto.getPhone());
+        user.setStatus(true);
         // encrypt the password using spring security
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 

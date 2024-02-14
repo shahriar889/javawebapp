@@ -25,18 +25,19 @@ public class Order {
     @Column(name = "OrderID")
     private Long orderID;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @Fetch(FetchMode.SUBSELECT)
     private List<OrderItem> orderItems = new ArrayList<>();
 
     @Column(nullable = false)
     private BigDecimal totalPrice;
 
-    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id", referencedColumnName = "customer_id")
     private Customer customer;
 
-    @OneToOne(mappedBy = "order")
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "shipping_method_id", referencedColumnName = "shipping_method_id")
     private ShippingMethod shippingMethod;
 
     @Column(nullable = false)
@@ -45,7 +46,7 @@ public class Order {
     @Column
     private LocalDateTime last_updated;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String invoiceID;
 
     @Column(nullable = false)

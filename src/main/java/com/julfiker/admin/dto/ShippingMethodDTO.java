@@ -1,13 +1,10 @@
 package com.julfiker.admin.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.internal.util.collections.Stack;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -15,15 +12,18 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderDTO {
-    private Long orderID;
-    private List<Long> orderItemIDs;
-    private BigDecimal totalPrice;
-    private Long customerID;
+public class ShippingMethodDTO {
     private Long shippingMethodID;
+    private String name;
+    private String description;
+    private Double Cost;
+    private Integer estimatedDeliveryTime;
+    private boolean isAvailable;
+    private String trackingURL;
+    private Integer handlingTime;
+    private boolean isInternational;
+    private Long deliveryManID;
+    private List<Long> orderID;
     private LocalDateTime creation_date;
     private LocalDateTime last_updated;
-    private String invoiceID;
-    private  boolean status;
-    private LocalDateTime deliverDate;
 }

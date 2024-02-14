@@ -2,10 +2,7 @@ package com.julfiker.admin.manager;
 
 import com.julfiker.admin.dto.*;
 import com.julfiker.admin.entity.*;
-import com.julfiker.admin.repository.CustomerRepository;
-import com.julfiker.admin.repository.MediaRepository;
-import com.julfiker.admin.repository.PaymentInfoRepository;
-import com.julfiker.admin.repository.UserRepository;
+import com.julfiker.admin.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,8 +40,10 @@ public class CustomerManagerImpl implements CustomerManager{
             customerDTO.setLast_updated(customer.getLast_updated());
         if(customer.getCart() != null)
             customerDTO.setCartID(customer.getCart().getCartID());
-        if (customer.getOrder() != null)
-            customerDTO.setOrderID(customer.getOrder().getOrderID());
+        List<Long> orderIDs = new ArrayList<>();
+        for(Order order : customer.getOrders())
+            orderIDs.add(order.getOrderID());
+        customerDTO.setOrderIDs(orderIDs);
         if(customer.getMedia() != null)
             customerDTO.setMediaID(customer.getMedia().getMediaID());
         if(customer.getLastOrderDate() != null)

@@ -29,7 +29,7 @@ public class DeliveryMan {
     private String contactInfo;
 
     @Column(nullable = false)
-    private boolean isAvailable;
+    private boolean available;
 
     @Column(nullable = false)
     private String vehicleType;

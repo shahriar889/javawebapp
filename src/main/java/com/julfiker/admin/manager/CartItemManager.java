@@ -9,7 +9,6 @@ import java.util.List;
 public interface CartItemManager {
 
     void saveCartItem(CartItemDTO cartItemDTO);
-    void updateCartItem(Long ID, CartItemDTO cartItemDTO);
 
     List<CartItemDTO> findAllCartItems();
     CartItemDTO findByCartItemByID(Long ID);

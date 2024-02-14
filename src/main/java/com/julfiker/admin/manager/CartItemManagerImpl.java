@@ -70,16 +70,6 @@ public class CartItemManagerImpl implements CartItemManager {
         itemRepository.save(item);
     }
 
-    @Override
-    public void updateCartItem(Long ID, CartItemDTO cartItemDTO) {
-        CartItem cartItem = cartItemRepository.findByCartItemID(ID);
-        if (cartItem == null) {
-            System.out.println("Could not find cartItem with this ID");
-            return;
-        }
-        if (cartItemDTO.getQuantity() != null)
-            cartItem.setQuantity(cartItemDTO.getQuantity());
-    }
 
     @Override
     public List<CartItemDTO> findAllCartItems() {

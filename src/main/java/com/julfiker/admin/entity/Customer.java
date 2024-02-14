@@ -53,8 +53,8 @@ public class Customer {
     @OneToOne(mappedBy = "customer", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private Cart cart;
 
-    @OneToOne(mappedBy = "customer", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    private Order order;
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    private List<Order> orders;
 
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER, orphanRemoval = true)
