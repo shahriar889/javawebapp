@@ -1,6 +1,7 @@
 package com.julfiker.admin.manager;
 
 import com.julfiker.admin.dto.ShippingMethodDTO;
+import com.julfiker.admin.entity.DeliveryMan;
 import com.julfiker.admin.entity.Order;
 import com.julfiker.admin.entity.ShippingMethod;
 import com.julfiker.admin.repository.DeliveryManRepository;
@@ -132,5 +133,23 @@ public class ShippingMethodManagerImpl implements ShippingMethodManager {
     @Transactional
     public void deleteShippingMethodByID(Long ID) {
         shippingMethodRepository.deleteByShippingMethodID(ID);
+    }
+
+    @Override
+    public void assignDeliveryManToShippingMethod(Long methodID, Long manID) {
+        DeliveryMan deliveryMan = deliveryManRepository.findByDeliveryManID(manID);
+        ShippingMethod shippingMethod = shippingMethodRepository.findByShippingMethodID(methodID);
+        if( deliveryMan == null || shippingMethod == null){
+            System.out.println("Could not find shipping method or delivery man");
+            return;
+        }
+        if(shippingMethod.isInternational()){
+            System.out.println("Cannot assign delivery man to international shipping method");
+            return;
+        }
+        shippingMethod.setDeliveryMan(deliveryMan);
+        deliveryMan.setShippingMethod(shippingMethod);
+        deliveryManRepository.save(deliveryMan);
+        shippingMethodRepository.save(shippingMethod);
     }
 }

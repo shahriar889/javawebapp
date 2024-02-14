@@ -15,4 +15,5 @@ public interface ShippingMethodManager {
     ShippingMethodDTO findByDeliveryMan(Long ID);
     void deleteShippingMethodByID(Long ID);
     void addShippingMethodToOrder(Long orderID, Long methodID);
+    void assignDeliveryManToShippingMethod(Long methodID, Long manID);
 }
