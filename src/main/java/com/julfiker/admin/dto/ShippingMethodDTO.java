@@ -22,7 +22,6 @@ public class ShippingMethodDTO {
     private String trackingURL;
     private Integer handlingTime;
     private boolean isInternational;
-    private Long deliveryManID;
     private List<Long> orderID;
     private LocalDateTime creation_date;
     private LocalDateTime last_updated;

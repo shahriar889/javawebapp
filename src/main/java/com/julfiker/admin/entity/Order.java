@@ -40,6 +40,10 @@ public class Order {
     @JoinColumn(name = "shipping_method_id", referencedColumnName = "shipping_method_id")
     private ShippingMethod shippingMethod;
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name ="delivery_man_ID", referencedColumnName = "Delivery_Man_ID")
+    private DeliveryMan deliveryMan;
+
     @Column(nullable = false)
     private LocalDateTime creation_date;
 

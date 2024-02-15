@@ -10,7 +10,6 @@ import java.util.List;
 public interface ShippingMethodRepository extends JpaRepository<ShippingMethod, Long> {
 
     List<ShippingMethod> findAll();
-    ShippingMethod findByDeliveryMan_DeliveryManID(Long ID);
     List<ShippingMethod> findAllByInternational(boolean check);
     ShippingMethod findByShippingMethodID(Long ID);
     void deleteByShippingMethodID(Long ID);

@@ -25,6 +25,8 @@ public class OrderManagerImpl implements OrderManager{
     ShippingMethodRepository shippingMethodRepository;
     @Autowired
     CustomerRepository customerRepository;
+    @Autowired
+    DeliveryManRepository manRepository;
 
     @Override
     public OrderDTO convertToDto(Order order) {
@@ -43,6 +45,8 @@ public class OrderManagerImpl implements OrderManager{
         orderDTO.setOrderItemIDs(orderItemIDs);
         if(order.getLast_updated() != null)
             orderDTO.setLast_updated(order.getLast_updated());
+        if(order.getDeliveryMan() != null)
+            orderDTO.setDeliveryManID(order.getDeliveryMan().getDeliveryManID());
         return orderDTO;
     }
 
@@ -50,52 +54,48 @@ public class OrderManagerImpl implements OrderManager{
     public void confirmOrder(Long cartID, Long shippingMethodID, String invoiceID) {
         Cart cart = cartRepository.findCartByCartID(cartID);
         ShippingMethod shippingMethod = shippingMethodRepository.findByShippingMethodID(shippingMethodID);
-        if(cart == null || shippingMethod == null){
+
+        if (cart == null || shippingMethod == null) {
             System.out.println("Could not find shipping method or cart");
             return;
         }
+
         List<CartItem> cartItems = cart.getCartItems();
-        if(cartItems.isEmpty()){
-            System.out.println("Cart is empty nothing to order");
+
+        if (cartItems.isEmpty()) {
+            System.out.println("Cart is empty, nothing to order");
             return;
         }
+
+        Customer customer = cart.getCustomer();
+
         Order order = new Order();
         order.setShippingMethod(shippingMethod);
-        List<Order> orders = shippingMethod.getOrders();
-        if(orders == null)
-            orders = new ArrayList<>();
-        shippingMethod.setLast_updated(LocalDateTime.now());
-        orders.add(order);
-        shippingMethod.setOrders(orders);
-        shippingMethodRepository.save(shippingMethod);
-        Customer customer = cart.getCustomer();
         order.setCustomer(customer);
-        List<Order> orderList = customer.getOrders();
-        if(orderList == null)
-            orderList = new ArrayList<>();
-        orderList.add(order);
-        customer.setOrders(orderList);
-        customerRepository.save(customer);
-        order.setStatus(true);
+        order.setStatus(false);
         order.setInvoiceID(invoiceID);
-        order.setDeliveryDate(LocalDateTime.now().plusDays(shippingMethod.getEstimatedDeliveryTime()+shippingMethod.getHandlingTime()));
+        order.setDeliveryDate(LocalDateTime.now().plusDays(shippingMethod.getEstimatedDeliveryTime() + shippingMethod.getHandlingTime()));
         order.setCreation_date(LocalDateTime.now());
-        BigDecimal price = cart.getTotalPrice();
-        price = price.add(price.multiply(new BigDecimal("0.15")));
+
+        BigDecimal price = cart.getTotalPrice().add(cart.getTotalPrice().multiply(new BigDecimal("0.15")));
         order.setTotalPrice(price);
+
         List<OrderItem> orderItems = new ArrayList<>();
-        for(CartItem cartItem : cartItems){
+
+        for (CartItem cartItem : cartItems) {
             OrderItem orderItem = new OrderItem();
             orderItem.setOrder(order);
             orderItem.setQuantity(cartItem.getQuantity());
             orderItem.setItem(cartItem.getItem());
             orderItem.setCreation_date(LocalDateTime.now());
             orderItems.add(orderItem);
-            orderItemRepository.save(orderItem);
         }
+
         order.setOrderItems(orderItems);
+
         orderRepository.save(order);
     }
+
 
     @Override
     public List<OrderDTO> getAllOrder() {
@@ -171,5 +171,20 @@ public class OrderManagerImpl implements OrderManager{
             return;
         }
         order.setStatus(!order.isStatus());
+        orderRepository.save(order);
+    }
+
+    @Override
+    public void assignDeliveryMan(Long orderID, Long manID) {
+        Order order = orderRepository.findByOrderID(orderID);
+        DeliveryMan man = manRepository.findByDeliveryManID(manID);
+        if(man == null || order == null){
+            System.out.println("Could not find delivery man or order");
+            return;
+        }
+        man.setAvailable(false);
+        order.setDeliveryMan(man);
+        man.setOrder(order);
+        orderRepository.save(order);
     }
 }

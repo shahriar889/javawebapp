@@ -38,7 +38,6 @@ public class ShippingMethodManagerImpl implements ShippingMethodManager {
         dto.setHandlingTime(shippingMethod.getHandlingTime());
         dto.setEstimatedDeliveryTime(shippingMethod.getEstimatedDeliveryTime());
         dto.setInternational(shippingMethod.isInternational());
-        dto.setDeliveryManID(shippingMethod.getDeliveryMan().getDeliveryManID());
         List<Long> orderIDs = new ArrayList<>();
         for (Order order : shippingMethod.getOrders())
             orderIDs.add(order.getOrderID());
@@ -64,10 +63,12 @@ public class ShippingMethodManagerImpl implements ShippingMethodManager {
             shippingMethod.setLast_updated(LocalDateTime.now());
         shippingMethod.setCost(DTO.getCost());
         shippingMethod.setAvailable(DTO.isAvailable());
-        List<Long> oderIds = DTO.getOrderID();
+        List<Long> orderIds = DTO.getOrderID();
         List<Order> orders = new ArrayList<>();
-        for(Long ID : oderIds)
-            orders.add(orderRepository.findByOrderID(ID));
+        if(orderIds != null){
+            for(Long ID : orderIds)
+                orders.add(orderRepository.findByOrderID(ID));
+        }
         shippingMethod.setOrders(orders);
         shippingMethod.setInternational(DTO.isInternational());
         shippingMethod.setTrackingURL(DTO.getTrackingURL());
@@ -75,8 +76,8 @@ public class ShippingMethodManagerImpl implements ShippingMethodManager {
         shippingMethod.setDescription(DTO.getDescription());
         shippingMethod.setHandlingTime(DTO.getHandlingTime());
         shippingMethod.setEstimatedDeliveryTime(DTO.getEstimatedDeliveryTime());
-        if(DTO.getDeliveryManID() != null)
-            shippingMethod.setDeliveryMan(deliveryManRepository.findByDeliveryManID(DTO.getDeliveryManID()));
+        List<DeliveryMan> deliveryMEN = new ArrayList<>();
+        shippingMethodRepository.save(shippingMethod);
     }
 
     @Override
@@ -106,50 +107,10 @@ public class ShippingMethodManagerImpl implements ShippingMethodManager {
     }
 
     @Override
-    public ShippingMethodDTO findByDeliveryMan(Long ID) {
-        ShippingMethod shippingMethod = shippingMethodRepository.findByDeliveryMan_DeliveryManID(ID);
-        if(shippingMethod == null){
-            System.out.println("Could not find delivery man with the ID");
-            return new ShippingMethodDTO();
-        }
-        return convertToDTO(shippingMethod);
-    }
-
-    @Override
-    public void addShippingMethodToOrder(Long orderID, Long methodID) {
-        Order order = orderRepository.findByOrderID(orderID);
-        ShippingMethod shippingMethod = shippingMethodRepository.findByShippingMethodID(methodID);
-        if( order == null || shippingMethod == null){
-            System.out.println("Could not find shipping method or order");
-            return;
-        }
-        order.setShippingMethod(shippingMethod);
-        shippingMethod.getOrders().add(order);
-        orderRepository.save(order);
-        shippingMethodRepository.save(shippingMethod);
-    }
-
-    @Override
     @Transactional
     public void deleteShippingMethodByID(Long ID) {
         shippingMethodRepository.deleteByShippingMethodID(ID);
     }
 
-    @Override
-    public void assignDeliveryManToShippingMethod(Long methodID, Long manID) {
-        DeliveryMan deliveryMan = deliveryManRepository.findByDeliveryManID(manID);
-        ShippingMethod shippingMethod = shippingMethodRepository.findByShippingMethodID(methodID);
-        if( deliveryMan == null || shippingMethod == null){
-            System.out.println("Could not find shipping method or delivery man");
-            return;
-        }
-        if(shippingMethod.isInternational()){
-            System.out.println("Cannot assign delivery man to international shipping method");
-            return;
-        }
-        shippingMethod.setDeliveryMan(deliveryMan);
-        deliveryMan.setShippingMethod(shippingMethod);
-        deliveryManRepository.save(deliveryMan);
-        shippingMethodRepository.save(shippingMethod);
-    }
+
 }

@@ -46,10 +46,6 @@ public class ShippingMethod {
     @Column(nullable = false)
     private boolean international;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "Delievry_Man_ID")
-    DeliveryMan deliveryMan;
-
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "shippingMethod")
     List<Order> orders;
 

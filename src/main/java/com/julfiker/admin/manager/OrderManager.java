@@ -15,6 +15,7 @@ public interface OrderManager {
     List<OrderDTO> getAllOrderByStatus(boolean status);
     void changeOrderStatus(Long ID);
     void deleteOrderByID(Long ID);
+    void assignDeliveryMan(Long orderID, Long manID);
 
 
 }

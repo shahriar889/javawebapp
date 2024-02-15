@@ -43,13 +43,11 @@ public class DeliveryMan {
     @Column(nullable = false)
     private Long numRatings;
 
-
-    @OneToOne(mappedBy = "deliveryMan")
-    private ShippingMethod shippingMethod;
-
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "User_ID")
     private User user;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "deliveryMan")
+    private Order order;
 
     @Column(nullable = false)
     private LocalDateTime creation_date;

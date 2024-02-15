@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,7 +22,7 @@ public class DeliveryManDTO {
     private String licensePlate;
     private BigDecimal rating;
     private Long numRatings;
-    private Long shippingMethodID;
+    private Long orderID;
     private Long userID;
     private LocalDateTime creation_date;
     private LocalDateTime last_updated;

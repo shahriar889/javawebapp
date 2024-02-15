@@ -26,4 +26,5 @@ public class OrderDTO {
     private String invoiceID;
     private  boolean status;
     private LocalDateTime deliverDate;
+    private Long deliveryManID;
 }
